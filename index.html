@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My MLM App</title>
+    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+</head>
+<body>
+    <h1>MLM Platform</h1>
+    
+    <div id="walletInfo" style="border: 1px solid #ccc; padding: 20px; margin: 10px;">
+        <h3>Wallet Status: <span id="status">Not Connected</span></h3>
+        <button onclick="connectWallet()">Connect MetaMask</button>
+    </div>
+
+    <div style="border: 1px solid #ccc; padding: 20px; margin: 10px;">
+        <h3>User Registration</h3>
+        <input type="text" id="uplineAddress" placeholder="Upline Address (optional)" style="width: 300px; padding: 8px;">
+        <br><br>
+        <button onclick="registerUser()">Register with 50 USDT</button>
+    </div>
+
+    <div id="userInfo" style="display:none; border: 1px solid green; padding: 20px; margin: 10px;">
+        <h3>Your Dashboard</h3>
+        <p>Earnings: <span id="earnings">0</span> USDT</p>
+        <p>Network Size: <span id="networkSize">0</span></p>
+        <p>Rank: Star <span id="rank">0</span></p>
+    </div>
+
+    <script>
+        let userAddress = '';
+        const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS_HERE";
+
+        async function connectWallet() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await window.ethereum.request({ 
+                        method: 'eth_requestAccounts' 
+                    });
+                    userAddress = accounts[0];
+                    document.getElementById('status').textContent = 'Connected: ' + userAddress.substring(0, 8) + '...';
+                    document.getElementById('userInfo').style.display = 'block';
+                    alert('Wallet Connected Successfully!');
+                } catch (error) {
+                    alert('Error connecting wallet: ' + error.message);
+                }
+            } else {
+                alert('Please install MetaMask!');
+            }
+        }
+
+        function registerUser() {
+            const upline = document.getElementById('uplineAddress').value;
+            if (!userAddress) {
+                alert('Please connect wallet first!');
+                return;
+            }
+            alert('Registration will be processed after contract setup!\nUpline: ' + (upline || 'No upline'));
+        }
+    </script>
+</body>
+</html>
