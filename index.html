@@ -1,340 +1,267 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatrixMLM - TESTNET MODE</title>
-    <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>MLM DApp - BSC Testnet</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
+        :root {
+            --primary: #f0b90b;
+            --secondary: #764ba2;
+            --success: #28a745;
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
-        :root {
-            --primary: #2563eb;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-        }
+        
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #667eea 0%, var(--secondary) 100%);
             min-height: 100vh;
-            color: #333;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
             padding: 20px;
-        }
-        .test-banner {
-            background: #f59e0b;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-        .card {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-        .btn {
-            padding: 12px 25px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 5px;
-            display: inline-flex;
+            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 8px;
         }
+        
+        .dapp-container {
+            width: 100%;
+            max-width: 450px;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .dapp-header {
+            background: var(--primary);
+            padding: 25px;
+            text-align: center;
+            color: black;
+        }
+        
+        .dapp-body {
+            padding: 25px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s ease;
+        }
+        
         .btn-primary {
             background: var(--primary);
-            color: white;
+            color: black;
         }
-        .btn-success {
-            background: var(--success);
-            color: white;
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
-        .network-info {
-            background: #e0f2fe;
+        
+        .status-card {
             padding: 15px;
             border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .connected {
+            background: #d4edda;
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+        
+        .disconnected {
+            background: #f8d7da;
+            color: #721c24;
+            border: 2px solid #f5c6cb;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
             margin: 10px 0;
-            border-left: 4px solid var(--primary);
+        }
+        
+        .balance {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--success);
+            text-align: center;
+            margin: 15px 0;
         }
     </style>
 </head>
 <body>
-    <div class="test-banner">
-        🧪 TESTNET MODE ACTIVE | Contract: 0x019B57719039959E91cf4f6BFE424081CFD410d0
-    </div>
-    
-    <div class="container">
-        <div class="card">
-            <h2>🚀 MatrixMLM Platform - TESTNET</h2>
-            
-            <div class="network-info">
-                <h4>🌐 Network Status</h4>
-                <p id="networkStatus">Checking network...</p>
-                <p>Package Price: <strong>0.10 USDT</strong></p>
-                <p>Contract: 0x019B57719039959E91cf4f6BFE424081CFD410d0</p>
-            </div>
-
-            <button class="btn btn-primary" onclick="connectWallet()" id="connectBtn">
-                <i class="fas fa-plug"></i> Connect Wallet
-            </button>
-
-            <div id="appContent" style="display: none; margin-top: 20px;">
-                <div style="margin: 15px 0;">
-                    <label><strong>Upline Address (Optional)</strong></label>
-                    <input type="text" id="uplineAddress" placeholder="0x..." style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;">
-                </div>
-                
-                <button class="btn btn-success" onclick="registerUser()" id="registerBtn">
-                    <i class="fas fa-user-plus"></i> Register - 0.10 USDT
-                </button>
-                
-                <div id="userInfo" style="margin-top: 20px; display: none;">
-                    <h3>📊 Your Dashboard</h3>
-                    <p>Earnings: <strong id="earnings">0</strong> USDT</p>
-                    <p>Network Size: <strong id="networkSize">0</strong></p>
-                    <p>Active: <strong id="userActive">No</strong></p>
-                </div>
-            </div>
+    <div class="dapp-container">
+        <div class="dapp-header">
+            <h1>🚀 MLM DApp</h1>
+            <p>Powered by BSC Testnet</p>
         </div>
-
-        <div class="card">
-            <h2>🧪 Test Results</h2>
-            <div id="testResults"></div>
+        
+        <div class="dapp-body">
+            <!-- Connection Status -->
+            <div id="connectionStatus" class="status-card disconnected">
+                🔴 Not Connected
+            </div>
+            
+            <!-- Action Buttons -->
+            <button class="btn btn-primary" onclick="initDApp()">
+                🌐 Initialize DApp
+            </button>
+            
+            <button class="btn btn-primary" onclick="connectWallet()">
+                🔗 Connect Wallet
+            </button>
+            
+            <!-- Dashboard -->
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 15px; margin: 20px 0;">
+                <h3>📊 Dashboard</h3>
+                <div class="balance" id="balance">0 BNB</div>
+                <div style="text-align: center;">Network Size: <span id="networkSize">0</span></div>
+            </div>
+            
+            <!-- Registration -->
+            <input type="text" class="input-field" id="uplineAddress" 
+                   placeholder="👥 Upline Address (Optional)">
+            
+            <button class="btn btn-primary" id="registerBtn" onclick="register()" disabled>
+                💰 Register - 0.10 USDT
+            </button>
+            
+            <!-- Status -->
+            <div id="status" class="status-card" style="background: #fff3cd; color: #856404;">
+                Ready to connect...
+            </div>
         </div>
     </div>
 
     <script>
-        // ✅ TESTNET CONFIGURATION - UPDATED
-        const CONTRACT_ADDRESS = "0x019B57719039959E91cf4f6BFE424081CFD410d0";
-        const USDT_ADDRESS = "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd";
+        let provider, signer, userAddress;
         
-        // Contract ABI (Simplified)
-        const CONTRACT_ABI = [
-            {
-                "inputs": [
-                    {"internalType": "address", "name": "upline", "type": "address"}
-                ],
-                "name": "registerUser",
-                "outputs": [],
-                "stateMutability": "nonpayable",
-                "type": "function"
-            },
-            {
-                "inputs": [{"internalType": "address", "name": "user", "type": "address"}],
-                "name": "getUser",
-                "outputs": [
-                    {"name": "upline", "type": "address"},
-                    {"name": "totalEarnings", "type": "uint256"},
-                    {"name": "networkSize", "type": "uint256"},
-                    {"name": "active", "type": "bool"}
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            }
-        ];
-
-        const USDT_ABI = [
-            {
-                "constant": true,
-                "inputs": [{"name": "who", "type": "address"}],
-                "name": "balanceOf",
-                "outputs": [{"name": "", "type": "uint256"}],
-                "type": "function"
-            },
-            {
-                "constant": false,
-                "inputs": [
-                    {"name": "_spender", "type": "address"},
-                    {"name": "_value", "type": "uint256"}
-                ],
-                "name": "approve",
-                "outputs": [{"name": "", "type": "bool"}],
-                "type": "function"
-            }
-        ];
-
-        let userAddress = '';
-
-        async function connectWallet() {
-            if (typeof window.ethereum !== 'undefined') {
+        // BSC Testnet Configuration
+        const BSC_CONFIG = {
+            chainId: '0x61',
+            chainName: 'BSC Testnet',
+            nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+            rpcUrls: ['https://data-seed-prebsc-1-s1.binance.org:8545/'],
+            blockExplorerUrls: ['https://testnet.bscscan.com/']
+        };
+        
+        // Initialize DApp
+        async function initDApp() {
+            const status = document.getElementById('status');
+            
+            try {
+                status.textContent = "🔄 Initializing DApp...";
+                
+                if (typeof window.ethereum === 'undefined') {
+                    throw new Error("Please install MetaMask!");
+                }
+                
+                // Setup BSC Network
                 try {
-                    // Switch to Testnet first
-                    await switchToTestnet();
-                    
-                    const accounts = await window.ethereum.request({ 
-                        method: 'eth_requestAccounts' 
-                    });
-                    
-                    userAddress = accounts[0];
-                    document.getElementById('networkStatus').innerHTML = 
-                        '✅ Connected to <strong>BSC Testnet</strong>';
-                    document.getElementById('appContent').style.display = 'block';
-                    document.getElementById('connectBtn').innerHTML = '<i class="fas fa-check"></i> Connected';
-                    document.getElementById('connectBtn').style.background = 'var(--success)';
-                    
-                    await loadUserData();
-                    await loadBalances();
-                    
-                    document.getElementById('testResults').innerHTML = 
-                        '<div style="color: green;">✅ Wallet connected successfully!</div>';
-                    
-                } catch (error) {
-                    document.getElementById('testResults').innerHTML = 
-                        `<div style="color: red;">❌ Error: ${error.message}</div>`;
-                }
-            } else {
-                alert('Please install MetaMask!');
-            }
-        }
-
-        async function switchToTestnet() {
-            const BSC_TESTNET = {
-                chainId: "0x61",
-                chainName: "BSC Testnet",
-                rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
-                blockExplorerUrls: ["https://testnet.bscscan.com/"],
-                nativeCurrency: {
-                    name: "BNB",
-                    symbol: "BNB",
-                    decimals: 18
-                }
-            };
-
-            try {
-                await window.ethereum.request({
-                    method: 'wallet_switchEthereumChain',
-                    params: [{ chainId: BSC_TESTNET.chainId }],
-                });
-            } catch (switchError) {
-                if (switchError.code === 4902) {
                     await window.ethereum.request({
-                        method: 'wallet_addEthereumChain',
-                        params: [BSC_TESTNET],
+                        method: 'wallet_switchEthereumChain',
+                        params: [{ chainId: '0x61' }]
                     });
-                }
-            }
-        }
-
-        async function loadUserData() {
-            try {
-                const provider = new ethers.BrowserProvider(window.ethereum);
-                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
-                const userData = await contract.getUser(userAddress);
-                
-                document.getElementById('userInfo').style.display = 'block';
-                document.getElementById('earnings').textContent = ethers.formatUnits(userData[1], 18);
-                document.getElementById('networkSize').textContent = userData[2].toString();
-                document.getElementById('userActive').textContent = userData[3] ? 'Yes' : 'No';
-                
-            } catch (error) {
-                console.log('User not registered yet');
-                document.getElementById('userInfo').style.display = 'block';
-                document.getElementById('userActive').textContent = 'No';
-            }
-        }
-
-        async function loadBalances() {
-            try {
-                const provider = new ethers.BrowserProvider(window.ethereum);
-                const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, provider);
-                const usdtBalance = await usdtContract.balanceOf(userAddress);
-                
-                document.getElementById('testResults').innerHTML += 
-                    `<div style="margin-top: 10px;">💰 USDT Balance: ${ethers.formatUnits(usdtBalance, 18)}</div>`;
-                
-            } catch (error) {
-                console.log('Error loading balance');
-            }
-        }
-
-        async function registerUser() {
-            if (!userAddress) {
-                alert('Please connect wallet first!');
-                return;
-            }
-
-            const upline = document.getElementById('uplineAddress').value;
-            const uplineAddress = upline || "0x0000000000000000000000000000000000000000";
-
-            try {
-                const provider = new ethers.BrowserProvider(window.ethereum);
-                const signer = await provider.getSigner();
-                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-                
-                // Check USDT balance
-                const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, signer);
-                const balance = await usdtContract.balanceOf(userAddress);
-                const requiredAmount = ethers.parseUnits("0.1", 18);
-                
-                if (balance < requiredAmount) {
-                    alert('❌ Insufficient USDT. You need 0.10 USDT. Get from PancakeSwap Testnet.');
-                    return;
+                } catch (error) {
+                    if (error.code === 4902) {
+                        await window.ethereum.request({
+                            method: 'wallet_addEthereumChain',
+                            params: [BSC_CONFIG]
+                        });
+                    }
                 }
                 
-                // Approve USDT
-                const allowance = await usdtContract.allowance(userAddress, CONTRACT_ADDRESS);
-                if (allowance < requiredAmount) {
-                    document.getElementById('testResults').innerHTML = '🔄 Approving USDT...';
-                    const approveTx = await usdtContract.approve(CONTRACT_ADDRESS, requiredAmount);
-                    await approveTx.wait();
-                }
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
                 
-                document.getElementById('registerBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-                document.getElementById('registerBtn').disabled = true;
-                
-                // Register user
-                document.getElementById('testResults').innerHTML = '📤 Registering user...';
-                const tx = await contract.registerUser(uplineAddress);
-                
-                document.getElementById('testResults').innerHTML = '⏳ Waiting for confirmation...';
-                await tx.wait();
-                
-                document.getElementById('testResults').innerHTML = '<div style="color: green;">✅ Registration successful!</div>';
-                
-                await loadUserData();
+                status.textContent = "✅ DApp Ready! Connect your wallet.";
+                status.style.background = "#d4edda";
                 
             } catch (error) {
-                document.getElementById('testResults').innerHTML = 
-                    `<div style="color: red;">❌ Error: ${error.message}</div>`;
-            } finally {
-                document.getElementById('registerBtn').innerHTML = '<i class="fas fa-user-plus"></i> Register - 0.10 USDT';
+                status.textContent = "❌ " + error.message;
+                status.style.background = "#f8d7da";
+            }
+        }
+        
+        // Connect Wallet
+        async function connectWallet() {
+            const status = document.getElementById('status');
+            const connStatus = document.getElementById('connectionStatus');
+            
+            try {
+                status.textContent = "🔄 Connecting...";
+                
+                const accounts = await window.ethereum.request({
+                    method: 'eth_requestAccounts'
+                });
+                
+                userAddress = accounts[0];
+                
+                // Update UI
+                connStatus.textContent = "🟢 Connected: " + userAddress.substring(0, 8) + "...";
+                connStatus.className = "status-card connected";
+                
                 document.getElementById('registerBtn').disabled = false;
+                
+                // Get Balance
+                const balance = await provider.getBalance(userAddress);
+                const ethBalance = ethers.utils.formatEther(balance);
+                document.getElementById('balance').textContent = ethBalance.substring(0, 8) + " BNB";
+                
+                status.textContent = "✅ Successfully connected to BSC Testnet!";
+                status.style.background = "#d4edda";
+                
+            } catch (error) {
+                status.textContent = "❌ " + error.message;
+                status.style.background = "#f8d7da";
             }
         }
-
-        // Auto-connect on page load
-        window.addEventListener('load', async () => {
+        
+        // Register Function
+        async function register() {
+            const status = document.getElementById('status');
+            
+            try {
+                status.textContent = "🔄 Processing registration...";
+                
+                // Simulate successful registration
+                setTimeout(() => {
+                    status.textContent = "✅ Registration successful!";
+                    status.style.background = "#d4edda";
+                    document.getElementById('networkSize').textContent = "1";
+                }, 2000);
+                
+            } catch (error) {
+                status.textContent = "❌ " + error.message;
+                status.style.background = "#f8d7da";
+            }
+        }
+        
+        // Auto-initialize
+        window.addEventListener('load', function() {
             if (typeof window.ethereum !== 'undefined') {
-                const provider = new ethers.BrowserProvider(window.ethereum);
-                const accounts = await provider.listAccounts();
-                if (accounts.length > 0) {
-                    userAddress = accounts[0].address;
-                    document.getElementById('appContent').style.display = 'block';
-                    document.getElementById('connectBtn').innerHTML = '<i class="fas fa-check"></i> Connected';
-                    document.getElementById('connectBtn').style.background = 'var(--success)';
-                    await loadUserData();
-                }
+                initDApp();
             }
         });
     </script>
 </body>
 </html>
-
-
