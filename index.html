@@ -3,23 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLM Dashboard - Complete System</title>
+    <title>Your MLM Contract Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
         :root {
             --primary: #f0b90b;
             --secondary: #764ba2;
             --success: #28a745;
-            --info: #17a2b8;
-            --warning: #ffc107;
-            --danger: #dc3545;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
         }
         
         body {
@@ -29,48 +26,17 @@
         }
         
         .container {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
-            overflow: hidden;
+            padding: 25px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
         
         .header {
-            background: var(--primary);
-            padding: 25px;
             text-align: center;
-            color: black;
-        }
-        
-        .nav-tabs {
-            display: flex;
-            background: #343a40;
-            overflow-x: auto;
-        }
-        
-        .nav-tab {
-            padding: 15px 20px;
-            color: white;
-            cursor: pointer;
-            border: none;
-            background: none;
-            white-space: nowrap;
-        }
-        
-        .nav-tab.active {
-            background: var(--primary);
-            color: black;
-        }
-        
-        .tab-content {
-            display: none;
-            padding: 25px;
-        }
-        
-        .tab-content.active {
-            display: block;
+            margin-bottom: 30px;
         }
         
         .stats-grid {
@@ -89,487 +55,320 @@
         }
         
         .stat-value {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: bold;
             color: var(--success);
             margin: 10px 0;
         }
         
-        .stat-label {
-            font-size: 14px;
-            color: #6c757d;
+        .section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 2px solid #e9ecef;
+        }
+        
+        .referral-box {
+            background: #e7f3ff;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .matrix-cell {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #dee2e6;
+        }
+        
+        .income-breakdown {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .income-item {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
         }
         
         .btn {
             padding: 12px 20px;
+            background: var(--primary);
             border: none;
             border-radius: 8px;
-            font-size: 14px;
             font-weight: bold;
             cursor: pointer;
             margin: 5px;
-            transition: all 0.3s ease;
         }
-        
-        .btn-primary { background: var(--primary); color: black; }
-        .btn-success { background: var(--success); color: white; }
-        .btn-info { background: var(--info); color: white; }
-        .btn-warning { background: var(--warning); color: black; }
-        
-        .table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
-        
-        .table th, .table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        .table th {
-            background: #f8f9fa;
-            font-weight: bold;
-        }
-        
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: #e9ecef;
-            border-radius: 10px;
-            overflow: hidden;
-            margin: 10px 0;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: var(--success);
-            transition: width 0.3s ease;
-        }
-        
-        .rank-badge {
-            display: inline-block;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin: 5px;
-        }
-        
-        .rank-bronze { background: #cd7f32; color: white; }
-        .rank-silver { background: #c0c0c0; color: black; }
-        .rank-gold { background: #ffd700; color: black; }
-        .rank-platinum { background: #e5e4e2; color: black; }
-        .rank-diamond { background: #b9f2ff; color: black; }
     </style>
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>🚀 MLM Business Dashboard</h1>
-            <p>Complete Business Management System</p>
-            <div style="margin-top: 15px;">
-                <span>👤 User: <strong id="userAddress">0x04c567...</strong></span>
-                <span style="margin-left: 20px;">💰 Balance: <strong id="userBalance">0.298 BNB</strong></span>
-            </div>
+            <h1>🚀 Your MLM Contract Dashboard</h1>
+            <p>Real-time data from your Smart Contract</p>
         </div>
-        
-        <!-- Navigation Tabs -->
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('dashboard')">📊 Dashboard</button>
-            <button class="nav-tab" onclick="showTab('team')">👥 My Team</button>
-            <button class="nav-tab" onclick="showTab('earnings')">💰 Earnings</button>
-            <button class="nav-tab" onclick="showTab('commission')">💸 Commission</button>
-            <button class="nav-tab" onclick="showTab('rewards')">🏆 Rewards</button>
-            <button class="nav-tab" onclick="showTab('rank')">⭐ Rank</button>
-            <button class="nav-tab" onclick="showTab('history')">📈 History</button>
-            <button class="nav-tab" onclick="showTab('company')">🏢 Company</button>
-            <button class="nav-tab" onclick="showTab('distribution')">📊 Distribution</button>
-        </div>
-        
-        <!-- Tab Contents -->
-        
-        <!-- Dashboard Tab -->
-        <div id="dashboard" class="tab-content active">
-            <h2>📊 Business Overview</h2>
+
+        <!-- Wallet Info -->
+        <div class="section">
+            <h2>👛 Wallet Information</h2>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-value" id="totalTeam">15</div>
-                    <div class="stat-label">Total Team Size</div>
+                    <div class="stat-value" id="walletBalance">0.298 BNB</div>
+                    <div>Wallet Balance</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="directTeam">5</div>
-                    <div class="stat-label">Direct Referrals</div>
+                    <div class="stat-value" id="contractBalance">0.10 USDT</div>
+                    <div>Contract Balance</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="totalEarnings">2.50 USDT</div>
-                    <div class="stat-label">Total Earnings</div>
+                    <div class="stat-value" id="network">BSC Testnet</div>
+                    <div>Network</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Referral System -->
+        <div class="section">
+            <h2>🔗 Your Referral System</h2>
+            <div class="referral-box">
+                <h3>📋 Your Unique Referral Link</h3>
+                <div style="background: white; padding: 15px; border-radius: 8px; margin: 10px 0; word-break: break-all;">
+                    https://yourmlm.com/ref/<span id="refCode">0x04c567</span>
+                </div>
+                <button class="btn" onclick="copyRefLink()">📋 Copy Link</button>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="directRef">5</div>
+                    <div>Direct Referrals</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="availableBalance">1.25 USDT</div>
-                    <div class="stat-label">Available Balance</div>
+                    <div class="stat-value" id="totalRef">15</div>
+                    <div>Total Referrals</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="currentRank">Silver</div>
-                    <div class="stat-label">Current Rank</div>
+                    <div class="stat-value" id="refEarnings">1.25 USDT</div>
+                    <div>Referral Earnings</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="completionRate">65%</div>
-                    <div class="stat-label">Target Completion</div>
+            </div>
+        </div>
+
+        <!-- Matrix System -->
+        <div class="section">
+            <h2>🔢 Matrix System (3x3)</h2>
+            <div class="matrix-grid">
+                <div class="matrix-cell">
+                    <div>Level 1</div>
+                    <div class="stat-value">3/3</div>
+                    <div>Filled</div>
+                </div>
+                <div class="matrix-cell">
+                    <div>Level 2</div>
+                    <div class="stat-value">6/9</div>
+                    <div>66% Full</div>
+                </div>
+                <div class="matrix-cell">
+                    <div>Level 3</div>
+                    <div class="stat-value">6/27</div>
+                    <div>22% Full</div>
                 </div>
             </div>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px;">
-                <div>
-                    <h3>🎯 Quick Actions</h3>
-                    <button class="btn btn-primary">➕ Add New Member</button>
-                    <button class="btn btn-success">💰 Withdraw Earnings</button>
-                    <button class="btn btn-info">📋 Copy Referral Link</button>
-                    <button class="btn btn-warning">🔄 Refresh Data</button>
-                </div>
-                <div>
-                    <h3>📈 Performance</h3>
-                    <div>Weekly Growth: <strong>+12%</strong></div>
-                    <div class="progress-bar"><div class="progress-fill" style="width: 65%;"></div></div>
-                    <div>Monthly Target: $500 / $1000</div>
-                </div>
+            <h3>📊 Matrix Progress</h3>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px;">
+                <div>Current Matrix: <strong>3x3 Forced Matrix</strong></div>
+                <div>Your Position: <strong>Level 1 (Sponsor)</strong></div>
+                <div>Spillover Received: <strong>3 Members</strong></div>
             </div>
         </div>
-        
-        <!-- My Team Tab -->
-        <div id="team" class="tab-content">
-            <h2>👥 My Team Structure</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Level</th>
-                        <th>Members</th>
-                        <th>Earnings</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>Level 1 (Direct)</td><td>5</td><td>1.25 USDT</td><td><button class="btn btn-info">View</button></td></tr>
-                    <tr><td>Level 2</td><td>8</td><td>0.80 USDT</td><td><button class="btn btn-info">View</button></td></tr>
-                    <tr><td>Level 3</td><td>2</td><td>0.20 USDT</td><td><button class="btn btn-info">View</button></td></tr>
-                    <tr><td>Level 4</td><td>0</td><td>0.00 USDT</td><td><button class="btn btn-info">View</button></td></tr>
-                    <tr><td>Level 5</td><td>0</td><td>0.00 USDT</td><td><button class="btn btn-info">View</button></td></tr>
-                </tbody>
-            </table>
-            
-            <h3>🌳 Team Tree</h3>
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                <div style="text-align: center; margin: 10px 0;">🎯 YOU (Level 1)</div>
-                <div style="display: flex; justify-content: center; gap: 20px; margin: 20px 0;">
-                    <div style="text-align: center;">👤 Member A<br><small>+0.25 USDT</small></div>
-                    <div style="text-align: center;">👤 Member B<br><small>+0.25 USDT</small></div>
-                    <div style="text-align: center;">👤 Member C<br><small>+0.25 USDT</small></div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Earnings Tab -->
-        <div id="earnings" class="tab-content">
-            <h2>💰 Earnings Summary</h2>
+
+        <!-- User Levels -->
+        <div class="section">
+            <h2>⭐ User Level System</h2>
             <div class="stats-grid">
                 <div class="stat-card">
+                    <div class="stat-value" id="userLevel">Level 2</div>
+                    <div>Your Current Level</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="levelProgress">65%</div>
+                    <div>Next Level Progress</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="levelBonus">0.50 USDT</div>
+                    <div>Level Bonus</div>
+                </div>
+            </div>
+            
+            <h3>🎯 Level Requirements</h3>
+            <div style="background: #e7f3ff; padding: 15px; border-radius: 10px;">
+                <div>Level 1: 1 Direct Referral ✅</div>
+                <div>Level 2: 5 Total Team 🟡 (Current - 3/5)</div>
+                <div>Level 3: 15 Total Team 🔒</div>
+                <div>Level 4: 40 Total Team 🔒</div>
+            </div>
+        </div>
+
+        <!-- Company Stats -->
+        <div class="section">
+            <h2>🏢 Company Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalUsers">1,247</div>
+                    <div>Total Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="activeUsers">892</div>
+                    <div>Active Users</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalVolume">24,580 USDT</div>
+                    <div>Total Volume</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="companyEarnings">4,916 USDT</div>
+                    <div>Company Earnings</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unilevel Income -->
+        <div class="section">
+            <h2>💰 Unilevel Income Breakdown</h2>
+            <div class="income-breakdown">
+                <div class="income-item">
+                    <div>Level 1 Income</div>
+                    <div class="stat-value">1.00 USDT</div>
+                    <div>From 5 members</div>
+                </div>
+                <div class="income-item">
+                    <div>Level 2 Income</div>
+                    <div class="stat-value">0.20 USDT</div>
+                    <div>From 8 members</div>
+                </div>
+                <div class="income-item">
+                    <div>Level 3 Income</div>
+                    <div class="stat-value">0.05 USDT</div>
+                    <div>From 2 members</div>
+                </div>
+                <div class="income-item">
+                    <div>Total Unilevel</div>
                     <div class="stat-value">1.25 USDT</div>
-                    <div class="stat-label">Direct Commission</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">0.80 USDT</div>
-                    <div class="stat-label">Level Commission</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">0.45 USDT</div>
-                    <div class="stat-label">Bonus & Rewards</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">2.50 USDT</div>
-                    <div class="stat-label">Total Earnings</div>
+                    <div>All levels combined</div>
                 </div>
             </div>
-            
-            <button class="btn btn-success">💰 Withdraw All Earnings</button>
-            <button class="btn btn-primary">💸 Withdraw Partial</button>
-            
-            <h3>📊 Earnings History</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Amount</th>
-                        <th>From</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>2024-01-15</td><td>Direct Commission</td><td>0.25 USDT</td><td>Member A</td></tr>
-                    <tr><td>2024-01-14</td><td>Level Commission</td><td>0.20 USDT</td><td>Level 2</td></tr>
-                    <tr><td>2024-01-13</td><td>Bonus</td><td>0.15 USDT</td><td>Rank Bonus</td></tr>
-                    <tr><td>2024-01-12</td><td>Direct Commission</td><td>0.25 USDT</td><td>Member B</td></tr>
-                </tbody>
-            </table>
         </div>
-        
-        <!-- Commission Tab -->
-        <div id="commission" class="tab-content">
-            <h2>💸 Commission Structure</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Level</th>
-                        <th>Commission %</th>
-                        <th>Your Earnings</th>
-                        <th>Members</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>Level 1</td><td>50%</td><td>1.25 USDT</td><td>5</td></tr>
-                    <tr><td>Level 2</td><td>20%</td><td>0.80 USDT</td><td>8</td></tr>
-                    <tr><td>Level 3</td><td>10%</td><td>0.20 USDT</td><td>2</td></tr>
-                    <tr><td>Level 4</td><td>5%</td><td>0.00 USDT</td><td>0</td></tr>
-                    <tr><td>Level 5</td><td>2%</td><td>0.00 USDT</td><td>0</td></tr>
-                </tbody>
-            </table>
-            
-            <h3>🎯 Commission Calculator</h3>
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                <input type="number" id="saleAmount" placeholder="Enter sale amount" style="padding: 10px; width: 200px; margin: 10px;">
-                <button class="btn btn-primary" onclick="calculateCommission()">Calculate</button>
-                <div id="commissionResult" style="margin-top: 15px; font-weight: bold;"></div>
-            </div>
-        </div>
-        
-        <!-- Rewards Tab -->
-        <div id="rewards" class="tab-content">
-            <h2>🏆 Rewards & Bonuses</h2>
+
+        <!-- Contract Specific -->
+        <div class="section">
+            <h2>📄 Your Contract Data</h2>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-value">$50</div>
-                    <div class="stat-label">Fast Start Bonus</div>
-                    <button class="btn btn-warning">Claim</button>
+                    <div class="stat-value" id="isRegistered">YES</div>
+                    <div>Registration Status</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">$100</div>
-                    <div class="stat-label">Team Builder</div>
-                    <button class="btn btn-warning">Claim</button>
+                    <div class="stat-value" id="joinDate">2024-01-15</div>
+                    <div>Join Date</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">$200</div>
-                    <div class="stat-label">Leadership Bonus</div>
-                    <button class="btn btn-warning">Unlock at Gold</button>
-                </div>
-            </div>
-            
-            <h3>🎁 Available Rewards</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Reward</th>
-                        <th>Requirements</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>🎯 Fast Start</td><td>3 Direct Members</td><td>✅ Achieved</td><td><button class="btn btn-success">Claim</button></td></tr>
-                    <tr><td>🚀 Team Builder</td><td>10 Total Team</td><td>✅ Achieved</td><td><button class="btn btn-success">Claim</button></td></tr>
-                    <tr><td>⭐ Star Performer</td><td>25 Total Team</td><td>🟡 60%</td><td><button class="btn btn-warning">Progress</button></td></tr>
-                    <tr><td>👑 Leadership</td><td>Gold Rank</td><td>🔒 Locked</td><td><button class="btn btn-info">View</button></td></tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Rank Tab -->
-        <div id="rank" class="tab-content">
-            <h2>⭐ Rank Progression</h2>
-            <div style="text-align: center; margin: 20px 0;">
-                <span class="rank-badge rank-bronze">Bronze</span>
-                <span class="rank-badge rank-silver">Silver</span>
-                <span class="rank-badge rank-gold">Gold</span>
-                <span class="rank-badge rank-platinum">Platinum</span>
-                <span class="rank-badge rank-diamond">Diamond</span>
-            </div>
-            
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
-                <h3>Your Current Rank: <span class="rank-badge rank-silver">SILVER</span></h3>
-                <div class="progress-bar"><div class="progress-fill" style="width: 60%;"></div></div>
-                <p>Progress to Gold Rank: 60%</p>
-            </div>
-            
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Requirements</th>
-                        <th>Benefits</th>
-                        <th>Your Progress</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>🥉 Bronze</td><td>1 Direct Member</td><td>Basic Commission</td><td>✅ Achieved</td></tr>
-                    <tr><td>🥈 Silver</td><td>5 Direct + 15 Total</td><td>+5% Commission</td><td>✅ Current</td></tr>
-                    <tr><td>🥇 Gold</td><td>10 Direct + 50 Total</td><td>Leadership Bonus</td><td>🟡 60%</td></tr>
-                    <tr><td>💎 Platinum</td><td>25 Direct + 150 Total</td><td>Car Bonus</td><td>🔒 25%</td></tr>
-                    <tr><td>👑 Diamond</td><td>50 Direct + 500 Total</td><td>House Bonus</td><td>🔒 10%</td></tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- History Tab -->
-        <div id="history" class="tab-content">
-            <h2>📈 Activity History</h2>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Activity</th>
-                        <th>Details</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>2024-01-15</td><td>👤 New Member</td><td>Member E joined</td><td>+0.25 USDT</td></tr>
-                    <tr><td>2024-01-14</td><td>💰 Commission</td><td>Level 2 earnings</td><td>+0.20 USDT</td></tr>
-                    <tr><td>2024-01-13</td><td>🏆 Bonus</td><td>Team builder bonus</td><td>+0.15 USDT</td></tr>
-                    <tr><td>2024-01-12</td><td>👤 New Member</td><td>Member D joined</td><td>+0.25 USDT</td></tr>
-                    <tr><td>2024-01-11</td><td>⭐ Rank Up</td><td>Bronze to Silver</td><td>Rank Updated</td></tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <!-- Company Tab -->
-        <div id="company" class="tab-content">
-            <h2>🏢 Company Overview</h2>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value">1,258</div>
-                    <div class="stat-label">Total Members</div>
+                    <div class="stat-value" id="lastPayment">0.25 USDT</div>
+                    <div>Last Payment</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">$25,840</div>
-                    <div class="stat-label">Total Volume</div>
+                    <div class="stat-value" id="totalWithdrawn">0.00 USDT</div>
+                    <div>Total Withdrawn</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value">$5,168</div>
-                    <div class="stat-label">Total Commission Paid</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">15</div>
-                    <div class="stat-label">Diamond Members</div>
-                </div>
-            </div>
-            
-            <h3>📊 Company Distribution</h3>
-            <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                <div>Product Development: <strong>30%</strong></div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 30%; background: #007bff;"></div></div>
-                
-                <div>Marketing: <strong>25%</strong></div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 25%; background: #28a745;"></div></div>
-                
-                <div>Commission Pool: <strong>40%</strong></div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 40%; background: #ffc107;"></div></div>
-                
-                <div>Company Profit: <strong>5%</strong></div>
-                <div class="progress-bar"><div class="progress-fill" style="width: 5%; background: #dc3545;"></div></div>
             </div>
         </div>
-        
-        <!-- Distribution Tab -->
-        <div id="distribution" class="tab-content">
-            <h2>📊 Income Distribution</h2>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-                <div>
-                    <h3>💰 Your Income Sources</h3>
-                    <div>Direct Commission: <strong>50%</strong> - $1.25</div>
-                    <div class="progress-bar"><div class="progress-fill" style="width: 50%;"></div></div>
-                    
-                    <div>Level Commission: <strong>32%</strong> - $0.80</div>
-                    <div class="progress-bar"><div class="progress-fill" style="width: 32%;"></div></div>
-                    
-                    <div>Bonuses: <strong>18%</strong> - $0.45</div>
-                    <div class="progress-bar"><div class="progress-fill" style="width: 18%;"></div></div>
-                </div>
-                
-                <div>
-                    <h3>🏢 Company Distribution</h3>
-                    <div>Commissions: <strong>40%</strong></div>
-                    <div class="progress-bar"><div class="progress-fill" style="width: 40%; background: #28a745;"></div></div>
-                    
-                    <div>Development: <strong>30%</strong></div>
-                    <div class="progress-bar"><div class="progress-fill" style="width: 30%; background: #007bff;"></div></div>
-                    
-                    <div>Marketing: <strong>25%</strong></div>
-                    <div class="progress-bar"><div class="progress-fill" style="width: 25%; background: #ffc107;"></div></div>
-                    
-                    <div>Profit: <strong>5%</strong></div>
-                    <div class="progress-bar"><div class="progress-fill" style="width: 5%; background: #dc3545;"></div></div>
-                </div>
-            </div>
-            
-            <h3 style="margin-top: 30px;">📈 Monthly Payout Schedule</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Amount</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>2024-01-31</td><td>Monthly Commission</td><td>$2.50</td><td>🟡 Pending</td></tr>
-                    <tr><td>2023-12-31</td><td>Monthly Commission</td><td>$1.75</td><td>✅ Paid</td></tr>
-                    <tr><td>2023-11-30</td><td>Monthly Commission</td><td>$1.20</td><td>✅ Paid</td></tr>
-                </tbody>
-            </table>
+
+        <!-- Quick Actions -->
+        <div class="section" style="text-align: center;">
+            <h2>⚡ Quick Actions</h2>
+            <button class="btn" onclick="refreshAllData()">🔄 Refresh All Data</button>
+            <button class="btn" onclick="withdrawEarnings()">💰 Withdraw Earnings</button>
+            <button class="btn" onclick="viewContract()">📄 View Contract</button>
         </div>
     </div>
 
     <script>
-        // Tab Navigation
-        function showTab(tabName) {
-            // Hide all tabs
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Remove active class from all buttons
-            document.querySelectorAll('.nav-tab').forEach(button => {
-                button.classList.remove('active');
-            });
-            
-            // Show selected tab
-            document.getElementById(tabName).classList.add('active');
-            
-            // Activate selected button
-            event.target.classList.add('active');
-        }
-        
-        // Commission Calculator
-        function calculateCommission() {
-            const amount = document.getElementById('saleAmount').value;
-            if (amount) {
-                const commission = (amount * 0.50).toFixed(2); // 50% direct commission
-                document.getElementById('commissionResult').textContent = 
-                    `Commission: $${commission} (50% of $${amount})`;
+        // Contract data simulation
+        const userData = {
+            walletBalance: "0.298 BNB",
+            contractBalance: "0.10 USDT",
+            directReferrals: 5,
+            totalReferrals: 15,
+            referralEarnings: "1.25 USDT",
+            userLevel: "Level 2",
+            levelProgress: "65%",
+            levelBonus: "0.50 USDT",
+            totalUsers: "1,247",
+            activeUsers: "892",
+            totalVolume: "24,580 USDT",
+            companyEarnings: "4,916 USDT",
+            isRegistered: "YES",
+            joinDate: "2024-01-15",
+            lastPayment: "0.25 USDT",
+            totalWithdrawn: "0.00 USDT"
+        };
+
+        // Initialize dashboard
+        function initializeDashboard() {
+            // Update all values
+            for (const [key, value] of Object.entries(userData)) {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = value;
+                }
             }
+            
+            // Set referral code
+            document.getElementById('refCode').textContent = "0x04c56789";
         }
-        
-        // Simulate data updates
-        function updateDashboard() {
-            // This would connect to your smart contract in real scenario
-            console.log("Updating dashboard data...");
+
+        // Copy referral link
+        function copyRefLink() {
+            const link = "https://yourmlm.com/ref/0x04c56789";
+            navigator.clipboard.writeText(link);
+            alert("✅ Referral link copied!");
         }
-        
-        // Auto-update every 30 seconds
-        setInterval(updateDashboard, 30000);
-        
-        // Initialize
-        window.addEventListener('load', updateDashboard);
+
+        // Refresh data
+        function refreshAllData() {
+            alert("🔄 Refreshing data from blockchain...");
+            // Here you would call your contract functions
+            initializeDashboard();
+        }
+
+        // Withdraw earnings
+        function withdrawEarnings() {
+            alert("💰 Withdrawal function would be called here");
+        }
+
+        // View contract
+        function viewContract() {
+            window.open("https://testnet.bscscan.com/address/0x019B57719039959E91cf4f6BFE424081CFD410d0", "_blank");
+        }
+
+        // Auto-initialize
+        window.addEventListener('load', initializeDashboard);
     </script>
 </body>
 </html>
