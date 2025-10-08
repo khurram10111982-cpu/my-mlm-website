@@ -3,32 +3,69 @@
 <head>
     <title>My MLM App</title>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .section { border: 1px solid #ccc; padding: 20px; margin: 10px 0; border-radius: 10px; }
+        button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
+        button:hover { background: #0056b3; }
+        input { padding: 8px; width: 300px; margin: 5px 0; }
+        .connected { border-color: green; background: #f0fff0; }
+    </style>
 </head>
 <body>
-    <h1>MLM Platform</h1>
+    <h1>🚀 MLM Platform</h1>
     
-    <div id="walletInfo" style="border: 1px solid #ccc; padding: 20px; margin: 10px;">
+    <div id="walletInfo" class="section">
         <h3>Wallet Status: <span id="status">Not Connected</span></h3>
         <button onclick="connectWallet()">Connect MetaMask</button>
     </div>
 
-    <div style="border: 1px solid #ccc; padding: 20px; margin: 10px;">
+    <div class="section">
         <h3>User Registration</h3>
-        <input type="text" id="uplineAddress" placeholder="Upline Address (optional)" style="width: 300px; padding: 8px;">
+        <input type="text" id="uplineAddress" placeholder="Upline Address (optional)">
         <br><br>
         <button onclick="registerUser()">Register with 50 USDT</button>
     </div>
 
-    <div id="userInfo" style="display:none; border: 1px solid green; padding: 20px; margin: 10px;">
+    <div id="userInfo" class="section" style="display:none;">
         <h3>Your Dashboard</h3>
         <p>Earnings: <span id="earnings">0</span> USDT</p>
         <p>Network Size: <span id="networkSize">0</span></p>
         <p>Rank: Star <span id="rank">0</span></p>
+        <p>Matrix Entries: <span id="matrixEntries">0</span></p>
     </div>
 
     <script>
         let userAddress = '';
-        const CONTRACT_ADDRESS = "YOUR_CONTRACT_ADDRESS_HERE";
+        const CONTRACT_ADDRESS = "0x058E5971425ffc019058dAb2300B8fd088625886";
+        
+        // Contract ABI (simplified)
+        const CONTRACT_ABI = [
+            {
+                "inputs": [{"internalType": "address", "name": "upline", "type": "address"}, {"internalType": "uint256", "name": "entries", "type": "uint256"}],
+                "name": "registerUser",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [{"internalType": "address", "name": "user", "type": "address"}],
+                "name": "getUser",
+                "outputs": [
+                    {"name": "upline", "type": "address"},
+                    {"name": "totalEarnings", "type": "uint256"},
+                    {"name": "networkSize", "type": "uint256"},
+                    {"name": "matrixEntries", "type": "uint256"},
+                    {"name": "matrixPayouts", "type": "uint256"},
+                    {"name": "rank", "type": "uint8"},
+                    {"name": "unlockedLevels", "type": "uint8"},
+                    {"name": "active", "type": "bool"},
+                    {"name": "directRefs", "type": "uint256"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
 
         async function connectWallet() {
             if (typeof window.ethereum !== 'undefined') {
@@ -38,7 +75,12 @@
                     });
                     userAddress = accounts[0];
                     document.getElementById('status').textContent = 'Connected: ' + userAddress.substring(0, 8) + '...';
+                    document.getElementById('walletInfo').classList.add('connected');
                     document.getElementById('userInfo').style.display = 'block';
+                    
+                    // Load user data
+                    await loadUserData();
+                    
                     alert('Wallet Connected Successfully!');
                 } catch (error) {
                     alert('Error connecting wallet: ' + error.message);
@@ -48,13 +90,47 @@
             }
         }
 
-        function registerUser() {
-            const upline = document.getElementById('uplineAddress').value;
+        async function loadUserData() {
+            try {
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
+                const userData = await contract.getUser(userAddress);
+                
+                document.getElementById('earnings').textContent = ethers.formatUnits(userData[1], 18);
+                document.getElementById('networkSize').textContent = userData[2].toString();
+                document.getElementById('matrixEntries').textContent = userData[3].toString();
+                document.getElementById('rank').textContent = userData[5].toString();
+            } catch (error) {
+                console.log('User not registered yet');
+            }
+        }
+
+        async function registerUser() {
             if (!userAddress) {
                 alert('Please connect wallet first!');
                 return;
             }
-            alert('Registration will be processed after contract setup!\nUpline: ' + (upline || 'No upline'));
+
+            const upline = document.getElementById('uplineAddress').value;
+            const uplineAddress = upline || "0x0000000000000000000000000000000000000000";
+
+            try {
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                const signer = await provider.getSigner();
+                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                
+                const tx = await contract.registerUser(uplineAddress, 1);
+                alert('Transaction sent! Waiting for confirmation...');
+                
+                await tx.wait();
+                alert('Registration Successful!');
+                
+                // Reload user data
+                await loadUserData();
+                
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
         }
     </script>
 </body>
