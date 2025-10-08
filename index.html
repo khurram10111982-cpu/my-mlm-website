@@ -1,43 +1,454 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>My MLM App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MatrixMLM - Professional MLM Platform</title>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: Arial; max-width: 800px; margin: 0 auto; padding: 20px; }
-        .section { border: 1px solid #ccc; padding: 20px; margin: 10px 0; border-radius: 10px; }
-        button { background: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 5px; }
-        button:hover { background: #0056b3; }
-        input { padding: 8px; width: 300px; margin: 5px 0; }
-        .connected { border-color: green; background: #f0fff0; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2c5aa0;
+            --secondary: #1e3a8a;
+            --accent: #3b82f6;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo i {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+
+        .logo h1 {
+            color: var(--primary);
+            font-size: 1.8rem;
+        }
+
+        .wallet-status {
+            background: var(--light);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid var(--accent);
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .card-header i {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .card-header h3 {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Button Styles */
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-block {
+            width: 100%;
+            justify-content: center;
+        }
+
+        /* Matrix Visualization */
+        .matrix-visual {
+            background: var(--light);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 15px;
+        }
+
+        .matrix-node {
+            width: 40px;
+            height: 40px;
+            background: var(--accent);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 5px;
+            font-weight: bold;
+        }
+
+        .matrix-node.empty {
+            background: var(--gray);
+            opacity: 0.5;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 10px;
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Badge */
+        .badge {
+            background: var(--accent);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
-    <h1>🚀 MLM Platform</h1>
-    
-    <div id="walletInfo" class="section">
-        <h3>Wallet Status: <span id="status">Not Connected</span></h3>
-        <button onclick="connectWallet()">Connect MetaMask</button>
-    </div>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-network-wired"></i>
+                <h1>MatrixMLM Platform</h1>
+            </div>
+            <div class="wallet-status">
+                <i class="fas fa-wallet"></i>
+                <span id="status">Not Connected</span>
+            </div>
+        </header>
 
-    <div class="section">
-        <h3>User Registration</h3>
-        <input type="text" id="uplineAddress" placeholder="Upline Address (optional)">
-        <br><br>
-        <button onclick="registerUser()">Register with 50 USDT</button>
-    </div>
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Wallet Connection Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-plug"></i>
+                        <h3>Wallet Connection</h3>
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="connectWallet()">
+                        <i class="fas fa-plug"></i> Connect MetaMask
+                    </button>
+                    <div class="stats-grid" style="margin-top: 20px;">
+                        <div class="stat-item">
+                            <div class="stat-value" id="usdtBalance">0</div>
+                            <div class="stat-label">USDT Balance</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="bnbBalance">0</div>
+                            <div class="stat-label">BNB Balance</div>
+                        </div>
+                    </div>
+                </div>
 
-    <div id="userInfo" class="section" style="display:none;">
-        <h3>Your Dashboard</h3>
-        <p>Earnings: <span id="earnings">0</span> USDT</p>
-        <p>Network Size: <span id="networkSize">0</span></p>
-        <p>Rank: Star <span id="rank">0</span></p>
-        <p>Matrix Entries: <span id="matrixEntries">0</span></p>
+                <!-- User Registration Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-user-plus"></i>
+                        <h3>User Registration</h3>
+                    </div>
+                    <div class="form-group">
+                        <label><i class="fas fa-users"></i> Upline Address (Optional)</label>
+                        <input type="text" id="uplineAddress" class="form-control" placeholder="0x0000000000000000000000000000000000000000">
+                    </div>
+                    <button class="btn btn-success btn-block" onclick="registerUser()" id="registerBtn">
+                        <i class="fas fa-rocket"></i> Register with 50 USDT
+                    </button>
+                    <div class="matrix-visual">
+                        <h4>Matrix Structure</h4>
+                        <div style="margin: 15px 0;">
+                            <div class="matrix-node">1</div>
+                        </div>
+                        <div style="margin: 15px 0;">
+                            <div class="matrix-node">2</div>
+                            <div class="matrix-node">3</div>
+                            <div class="matrix-node">4</div>
+                            <div class="matrix-node">5</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- User Dashboard Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <h3>User Dashboard</h3>
+                        <span class="badge" id="rankBadge">Star 0</span>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="earnings">0</div>
+                            <div class="stat-label">Total Earnings</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="networkSize">0</div>
+                            <div class="stat-label">Network Size</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="matrixEntries">0</div>
+                            <div class="stat-label">Matrix Entries</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="directRefs">0</div>
+                            <div class="stat-label">Direct Referrals</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-bolt"></i>
+                        <h3>Quick Actions</h3>
+                    </div>
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <i class="fas fa-plus-circle feature-icon"></i>
+                            <div>Add Matrix</div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-money-bill-wave feature-icon"></i>
+                            <div>Withdraw</div>
+                        </div>
+                        <div class="feature-item">
+                            <i class="fas fa-chart-line feature-icon"></i>
+                            <div>View Network</div>
+                        </div>
+                    </div>
+                    <button class="btn btn-warning btn-block" style="margin-top: 15px;">
+                        <i class="fas fa-history"></i> Transaction History
+                    </button>
+                </div>
+
+                <!-- Commission Structure Card -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-sitemap"></i>
+                        <h3>Commission Levels</h3>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
+                        <div style="background: var(--light); padding: 10px; border-radius: 8px; text-align: center;">
+                            <div style="font-weight: bold; color: var(--primary);">Level 1</div>
+                            <div>20%</div>
+                        </div>
+                        <div style="background: var(--light); padding: 10px; border-radius: 8px; text-align: center;">
+                            <div style="font-weight: bold; color: var(--primary);">Level 2</div>
+                            <div>10%</div>
+                        </div>
+                        <div style="background: var(--light); padding: 10px; border-radius: 8px; text-align: center;">
+                            <div style="font-weight: bold; color: var(--primary);">Level 3</div>
+                            <div>5%</div>
+                        </div>
+                        <div style="background: var(--light); padding: 10px; border-radius: 8px; text-align: center;">
+                            <div style="font-weight: bold; color: var(--primary);">Level 4</div>
+                            <div>4%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        let userAddress = '';
+        // Contract details
         const CONTRACT_ADDRESS = "0x058E5971425ffc019058dAb2300B8fd088625886";
+        const USDT_ADDRESS = "0x55d398326f99059fF775485246999027B3197955";
         
         // Contract ABI (simplified)
         const CONTRACT_ABI = [
@@ -67,6 +478,25 @@
             }
         ];
 
+        const USDT_ABI = [
+            {
+                "constant": true,
+                "inputs": [{"name": "who", "type": "address"}],
+                "name": "balanceOf",
+                "outputs": [{"name": "", "type": "uint256"}],
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [{"name": "_spender", "type": "address"}, {"name": "_value", "type": "uint256"}],
+                "name": "approve",
+                "outputs": [{"name": "", "type": "bool"}],
+                "type": "function"
+            }
+        ];
+
+        let userAddress = '';
+
         async function connectWallet() {
             if (typeof window.ethereum !== 'undefined') {
                 try {
@@ -75,18 +505,16 @@
                     });
                     userAddress = accounts[0];
                     document.getElementById('status').textContent = 'Connected: ' + userAddress.substring(0, 8) + '...';
-                    document.getElementById('walletInfo').classList.add('connected');
-                    document.getElementById('userInfo').style.display = 'block';
                     
-                    // Load user data
                     await loadUserData();
+                    await loadBalances();
                     
-                    alert('Wallet Connected Successfully!');
+                    alert('🎉 Wallet Connected Successfully!');
                 } catch (error) {
-                    alert('Error connecting wallet: ' + error.message);
+                    alert('❌ Error connecting wallet: ' + error.message);
                 }
             } else {
-                alert('Please install MetaMask!');
+                alert('⚠️ Please install MetaMask!');
             }
         }
 
@@ -96,18 +524,36 @@
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
                 const userData = await contract.getUser(userAddress);
                 
-                document.getElementById('earnings').textContent = ethers.formatUnits(userData[1], 18);
+                document.getElementById('earnings').textContent = parseFloat(ethers.formatUnits(userData[1], 18)).toFixed(2);
                 document.getElementById('networkSize').textContent = userData[2].toString();
                 document.getElementById('matrixEntries').textContent = userData[3].toString();
-                document.getElementById('rank').textContent = userData[5].toString();
+                document.getElementById('directRefs').textContent = userData[8].toString();
+                document.getElementById('rankBadge').textContent = 'Star ' + userData[5].toString();
             } catch (error) {
                 console.log('User not registered yet');
             }
         }
 
+        async function loadBalances() {
+            try {
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                
+                // USDT Balance
+                const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, provider);
+                const usdtBalance = await usdtContract.balanceOf(userAddress);
+                document.getElementById('usdtBalance').textContent = parseFloat(ethers.formatUnits(usdtBalance, 18)).toFixed(2);
+                
+                // BNB Balance
+                const bnbBalance = await provider.getBalance(userAddress);
+                document.getElementById('bnbBalance').textContent = parseFloat(ethers.formatUnits(bnbBalance, 18)).toFixed(4);
+            } catch (error) {
+                console.log('Error loading balances');
+            }
+        }
+
         async function registerUser() {
             if (!userAddress) {
-                alert('Please connect wallet first!');
+                alert('⚠️ Please connect wallet first!');
                 return;
             }
 
@@ -119,19 +565,58 @@
                 const signer = await provider.getSigner();
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
                 
+                // Check USDT balance
+                const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, signer);
+                const balance = await usdtContract.balanceOf(userAddress);
+                const requiredAmount = ethers.parseUnits("50", 18);
+                
+                if (balance < requiredAmount) {
+                    alert('❌ Insufficient USDT balance. You need 50 USDT.');
+                    return;
+                }
+                
+                // Check and approve USDT
+                const allowance = await usdtContract.allowance(userAddress, CONTRACT_ADDRESS);
+                if (allowance < requiredAmount) {
+                    alert('🔄 Approving USDT...');
+                    const approveTx = await usdtContract.approve(CONTRACT_ADDRESS, requiredAmount);
+                    await approveTx.wait();
+                    alert('✅ USDT Approved! Now registering...');
+                }
+                
+                document.getElementById('registerBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                document.getElementById('registerBtn').disabled = true;
+                
                 const tx = await contract.registerUser(uplineAddress, 1);
-                alert('Transaction sent! Waiting for confirmation...');
+                alert('📤 Transaction sent! Waiting for confirmation...');
                 
                 await tx.wait();
-                alert('Registration Successful!');
+                alert('🎉 Registration Successful! Welcome to MatrixMLM!');
                 
-                // Reload user data
                 await loadUserData();
+                await loadBalances();
                 
             } catch (error) {
-                alert('Error: ' + error.message);
+                alert('❌ Error: ' + error.message);
+            } finally {
+                document.getElementById('registerBtn').innerHTML = '<i class="fas fa-rocket"></i> Register with 50 USDT';
+                document.getElementById('registerBtn').disabled = false;
             }
         }
+
+        // Load initial data if wallet is already connected
+        window.addEventListener('load', async () => {
+            if (typeof window.ethereum !== 'undefined') {
+                const provider = new ethers.BrowserProvider(window.ethereum);
+                const accounts = await provider.listAccounts();
+                if (accounts.length > 0) {
+                    userAddress = accounts[0].address;
+                    document.getElementById('status').textContent = 'Connected: ' + userAddress.substring(0, 8) + '...';
+                    await loadUserData();
+                    await loadBalances();
+                }
+            }
+        });
     </script>
 </body>
 </html>
