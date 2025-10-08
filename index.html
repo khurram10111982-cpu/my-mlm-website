@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MatrixMLM - Advanced Network Marketing Platform</title>
+    <title>MatrixMLM - TESTNET MODE</title>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -13,586 +13,127 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
         :root {
             --primary: #2563eb;
-            --secondary: #1d4ed8;
-            --accent: #3b82f6;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
-            --light: #f8fafc;
-            --dark: #1e293b;
-            --gray: #64748b;
         }
-
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            color: var(--dark);
+            color: #333;
         }
-
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
-
-        /* Header Styles */
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .logo i {
-            font-size: 2.5rem;
-            color: var(--primary);
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .logo h1 {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 2rem;
-            font-weight: 700;
-        }
-
-        .wallet-status {
-            background: var(--light);
-            padding: 12px 24px;
-            border-radius: 12px;
-            border: 2px solid var(--accent);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* Main Grid */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 25px;
-            margin-bottom: 25px;
-        }
-
-        /* Card Styles */
-        .card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 25px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid var(--light);
-        }
-
-        .card-header i {
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .card-header h3 {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 1.5rem;
-            font-weight: 600;
-        }
-
-        /* Stats Grid */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .stat-item {
-            background: linear-gradient(135deg, var(--light), #ffffff);
-            padding: 20px;
-            border-radius: 15px;
+        .test-banner {
+            background: #f59e0b;
+            color: white;
+            padding: 15px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.3);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-        }
-
-        .stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 0.95rem;
-            color: var(--gray);
-            font-weight: 500;
-        }
-
-        /* Form Styles */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 10px;
-            color: var(--dark);
-            font-weight: 600;
-            font-size: 1rem;
-        }
-
-        .form-control {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: var(--light);
-        }
-
-        .form-control:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* Button Styles */
-        .btn {
-            padding: 15px 30px;
-            border: none;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, var(--success), #34d399);
-            color: white;
-            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-success:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-        }
-
-        .btn-block {
-            width: 100%;
-            justify-content: center;
-        }
-
-        /* Matrix Visualization */
-        .matrix-visual {
-            background: linear-gradient(135deg, var(--light), #ffffff);
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            margin-top: 20px;
-            border: 1px solid rgba(255,255,255,0.3);
-        }
-
-        .matrix-node {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 12px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            margin: 8px;
             font-weight: bold;
             font-size: 1.1rem;
-            box-shadow: 0 5px 15px rgba(37, 99, 235, 0.3);
-            transition: all 0.3s ease;
         }
-
-        .matrix-node:hover {
-            transform: scale(1.1);
-            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
-        }
-
-        /* Features Grid */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-top: 25px;
-        }
-
-        .feature-item {
-            text-align: center;
-            padding: 20px;
-            background: linear-gradient(135deg, var(--light), #ffffff);
+        .card {
+            background: white;
             border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.3);
-            transition: all 0.3s ease;
-        }
-
-        .feature-item:hover {
-            transform: translateY(-5px);
+            padding: 25px;
+            margin: 20px 0;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 15px;
-        }
-
-        /* Badge */
-        .badge {
-            background: linear-gradient(135deg, var(--accent), var(--primary));
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-left: 12px;
-            font-weight: 600;
-        }
-
-        /* Network Stats */
-        .network-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .level-stat {
-            text-align: center;
-            padding: 15px;
-            background: var(--light);
+        .btn {
+            padding: 12px 25px;
+            border: none;
             border-radius: 10px;
-            border: 1px solid rgba(255,255,255,0.3);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
         }
-
-        .level-number {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 5px;
+        .btn-primary {
+            background: var(--primary);
+            color: white;
         }
-
-        .level-label {
-            font-size: 0.85rem;
-            color: var(--gray);
+        .btn-success {
+            background: var(--success);
+            color: white;
         }
-
-        /* Responsive */
-        @media (max-width: 1024px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .network-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            header {
-                flex-direction: column;
-                gap: 15px;
-                text-align: center;
-            }
-        }
-
-        /* Loading Animation */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .fa-spinner {
-            animation: spin 1s linear infinite;
-        }
-
-        /* Status Indicators */
-        .status-connected {
-            color: var(--success);
-            font-weight: 700;
-        }
-
-        .status-disconnected {
-            color: var(--danger);
-            font-weight: 700;
+        .network-info {
+            background: #e0f2fe;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid var(--primary);
         }
     </style>
 </head>
 <body>
+    <div class="test-banner">
+        🧪 TESTNET MODE ACTIVE | Contract: 0x019B57719039959E91cf4f6BFE424081CFD410d0
+    </div>
+    
     <div class="container">
-        <!-- Header -->
-        <header>
-            <div class="logo">
-                <i class="fas fa-network-wired"></i>
-                <div>
-                    <h1>MatrixMLM Platform</h1>
-                    <p style="color: var(--gray); font-size: 0.9rem; margin-top: 5px;">Advanced Network Marketing Solution</p>
-                </div>
-            </div>
-            <div class="wallet-status">
-                <i class="fas fa-wallet"></i>
-                <span id="status" class="status-disconnected">Wallet Not Connected</span>
-            </div>
-        </header>
-
-        <!-- Main Grid -->
-        <div class="main-grid">
-            <!-- Left Column -->
-            <div>
-                <!-- Wallet Connection Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-plug"></i>
-                        <h3>Wallet Connection</h3>
-                    </div>
-                    <button class="btn btn-primary btn-block" onclick="connectWallet()" id="connectBtn">
-                        <i class="fas fa-plug"></i> Connect MetaMask Wallet
-                    </button>
-                    <div class="stats-grid" style="margin-top: 25px;">
-                        <div class="stat-item">
-                            <div class="stat-value" id="usdtBalance">0.00</div>
-                            <div class="stat-label">USDT Balance</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="bnbBalance">0.0000</div>
-                            <div class="stat-label">BNB Balance</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- User Registration Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-user-plus"></i>
-                        <h3>User Registration</h3>
-                    </div>
-                    <div class="form-group">
-                        <label><i class="fas fa-users"></i> Referral Address (Optional)</label>
-                        <input type="text" id="uplineAddress" class="form-control" placeholder="Enter upline wallet address (0x...)">
-                    </div>
-                    <button class="btn btn-success btn-block" onclick="registerUser()" id="registerBtn">
-                        <i class="fas fa-rocket"></i> Register Account - 50 USDT
-                    </button>
-                    
-                    <div class="matrix-visual">
-                        <h4 style="margin-bottom: 20px; color: var(--primary);">Matrix Structure Preview</h4>
-                        <div style="margin: 20px 0;">
-                            <div class="matrix-node">YOU</div>
-                        </div>
-                        <div style="margin: 20px 0;">
-                            <div class="matrix-node">L1</div>
-                            <div class="matrix-node">L2</div>
-                            <div class="matrix-node">L3</div>
-                            <div class="matrix-node">L4</div>
-                            <div class="matrix-node">L5</div>
-                        </div>
-                        <p style="color: var(--gray); font-size: 0.9rem; margin-top: 15px;">5x5 Forced Matrix System</p>
-                    </div>
-                </div>
+        <div class="card">
+            <h2>🚀 MatrixMLM Platform - TESTNET</h2>
+            
+            <div class="network-info">
+                <h4>🌐 Network Status</h4>
+                <p id="networkStatus">Checking network...</p>
+                <p>Package Price: <strong>0.10 USDT</strong></p>
+                <p>Contract: 0x019B57719039959E91cf4f6BFE424081CFD410d0</p>
             </div>
 
-            <!-- Right Column -->
-            <div>
-                <!-- User Dashboard Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-tachometer-alt"></i>
-                        <h3>Dashboard Overview</h3>
-                        <span class="badge" id="rankBadge">Beginner</span>
-                    </div>
-                    <div class="stats-grid">
-                        <div class="stat-item">
-                            <div class="stat-value" id="earnings">0.00</div>
-                            <div class="stat-label">Total Earnings (USDT)</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="networkSize">0</div>
-                            <div class="stat-label">Network Size</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="matrixEntries">0</div>
-                            <div class="stat-label">Active Positions</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="directRefs">0</div>
-                            <div class="stat-label">Direct Referrals</div>
-                        </div>
-                    </div>
+            <button class="btn btn-primary" onclick="connectWallet()" id="connectBtn">
+                <i class="fas fa-plug"></i> Connect Wallet
+            </button>
 
-                    <!-- Network Levels -->
-                    <div style="margin-top: 25px;">
-                        <h4 style="margin-bottom: 15px; color: var(--primary);">Network Levels Performance</h4>
-                        <div class="network-stats">
-                            <div class="level-stat">
-                                <div class="level-number" id="level1">0</div>
-                                <div class="level-label">Level 1</div>
-                            </div>
-                            <div class="level-stat">
-                                <div class="level-number" id="level2">0</div>
-                                <div class="level-label">Level 2</div>
-                            </div>
-                            <div class="level-stat">
-                                <div class="level-number" id="level3">0</div>
-                                <div class="level-label">Level 3</div>
-                            </div>
-                            <div class="level-stat">
-                                <div class="level-number" id="level4">0</div>
-                                <div class="level-label">Level 4</div>
-                            </div>
-                        </div>
-                    </div>
+            <div id="appContent" style="display: none; margin-top: 20px;">
+                <div style="margin: 15px 0;">
+                    <label><strong>Upline Address (Optional)</strong></label>
+                    <input type="text" id="uplineAddress" placeholder="0x..." style="width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 5px;">
                 </div>
-
-                <!-- Quick Actions Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-bolt"></i>
-                        <h3>Quick Actions</h3>
-                    </div>
-                    <div class="features-grid">
-                        <div class="feature-item">
-                            <i class="fas fa-plus-circle feature-icon"></i>
-                            <div style="font-weight: 600; margin-bottom: 5px;">Add Position</div>
-                            <div style="font-size: 0.8rem; color: var(--gray);">Buy new matrix entry</div>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-money-bill-wave feature-icon"></i>
-                            <div style="font-weight: 600; margin-bottom: 5px;">Withdraw Funds</div>
-                            <div style="font-size: 0.8rem; color: var(--gray);">Claim your earnings</div>
-                        </div>
-                        <div class="feature-item">
-                            <i class="fas fa-chart-line feature-icon"></i>
-                            <div style="font-weight: 600; margin-bottom: 5px;">Network View</div>
-                            <div style="font-size: 0.8rem; color: var(--gray);">See your team structure</div>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary btn-block" style="margin-top: 20px;">
-                        <i class="fas fa-history"></i> View Transaction History
-                    </button>
-                </div>
-
-                <!-- Commission Structure Card -->
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fas fa-sitemap"></i>
-                        <h3>Commission Structure</h3>
-                    </div>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                        <div style="background: linear-gradient(135deg, var(--light), #ffffff); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.3);">
-                            <div style="font-weight: 700; font-size: 1.1rem; color: var(--primary); margin-bottom: 8px;">Level 1</div>
-                            <div style="font-size: 1.3rem; font-weight: 700; color: var(--success);">20%</div>
-                            <div style="font-size: 0.8rem; color: var(--gray); margin-top: 5px;">Direct Referrals</div>
-                        </div>
-                        <div style="background: linear-gradient(135deg, var(--light), #ffffff); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.3);">
-                            <div style="font-weight: 700; font-size: 1.1rem; color: var(--primary); margin-bottom: 8px;">Level 2</div>
-                            <div style="font-size: 1.3rem; font-weight: 700; color: var(--success);">10%</div>
-                            <div style="font-size: 0.8rem; color: var(--gray); margin-top: 5px;">2nd Level</div>
-                        </div>
-                        <div style="background: linear-gradient(135deg, var(--light), #ffffff); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.3);">
-                            <div style="font-weight: 700; font-size: 1.1rem; color: var(--primary); margin-bottom: 8px;">Level 3</div>
-                            <div style="font-size: 1.3rem; font-weight: 700; color: var(--success);">5%</div>
-                            <div style="font-size: 0.8rem; color: var(--gray); margin-top: 5px;">3rd Level</div>
-                        </div>
-                        <div style="background: linear-gradient(135deg, var(--light), #ffffff); padding: 15px; border-radius: 12px; text-align: center; border: 1px solid rgba(255,255,255,0.3);">
-                            <div style="font-weight: 700; font-size: 1.1rem; color: var(--primary); margin-bottom: 8px;">Level 4</div>
-                            <div style="font-size: 1.3rem; font-weight: 700; color: var(--success);">4%</div>
-                            <div style="font-size: 0.8rem; color: var(--gray); margin-top: 5px;">4th Level</div>
-                        </div>
-                    </div>
-                    <div style="text-align: center; margin-top: 15px;">
-                        <p style="color: var(--gray); font-size: 0.9rem;">+ 6 more levels with 1-3% commissions</p>
-                    </div>
+                
+                <button class="btn btn-success" onclick="registerUser()" id="registerBtn">
+                    <i class="fas fa-user-plus"></i> Register - 0.10 USDT
+                </button>
+                
+                <div id="userInfo" style="margin-top: 20px; display: none;">
+                    <h3>📊 Your Dashboard</h3>
+                    <p>Earnings: <strong id="earnings">0</strong> USDT</p>
+                    <p>Network Size: <strong id="networkSize">0</strong></p>
+                    <p>Active: <strong id="userActive">No</strong></p>
                 </div>
             </div>
+        </div>
+
+        <div class="card">
+            <h2>🧪 Test Results</h2>
+            <div id="testResults"></div>
         </div>
     </div>
 
     <script>
-        // Contract Configuration
-        const CONTRACT_ADDRESS = "0x058E5971425ffc019058dAb2300B8fd088625886";
-        const USDT_ADDRESS = "0x55d398326f99059fF775485246999027B3197955";
+        // ✅ TESTNET CONFIGURATION - UPDATED
+        const CONTRACT_ADDRESS = "0x019B57719039959E91cf4f6BFE424081CFD410d0";
+        const USDT_ADDRESS = "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd";
         
-        // Contract ABI (Essential Functions Only)
+        // Contract ABI (Simplified)
         const CONTRACT_ABI = [
-            // registerUser function
             {
                 "inputs": [
-                    {"internalType": "address", "name": "upline", "type": "address"},
-                    {"internalType": "uint256", "name": "entries", "type": "uint256"}
+                    {"internalType": "address", "name": "upline", "type": "address"}
                 ],
                 "name": "registerUser",
                 "outputs": [],
                 "stateMutability": "nonpayable",
                 "type": "function"
             },
-            // getUser function
             {
                 "inputs": [{"internalType": "address", "name": "user", "type": "address"}],
                 "name": "getUser",
@@ -600,32 +141,13 @@
                     {"name": "upline", "type": "address"},
                     {"name": "totalEarnings", "type": "uint256"},
                     {"name": "networkSize", "type": "uint256"},
-                    {"name": "matrixEntries", "type": "uint256"},
-                    {"name": "matrixPayouts", "type": "uint256"},
-                    {"name": "rank", "type": "uint8"},
-                    {"name": "unlockedLevels", "type": "uint8"},
-                    {"name": "active", "type": "bool"},
-                    {"name": "directRefs", "type": "uint256"}
-                ],
-                "stateMutability": "view",
-                "type": "function"
-            },
-            // getPlatformStats function
-            {
-                "inputs": [],
-                "name": "getPlatformStats",
-                "outputs": [
-                    {"name": "_totalUsers", "type": "uint256"},
-                    {"name": "_activeUsers", "type": "uint256"},
-                    {"name": "_totalCommissionsPaid", "type": "uint256"},
-                    {"name": "_totalMatrixPayouts", "type": "uint256"}
+                    {"name": "active", "type": "bool"}
                 ],
                 "stateMutability": "view",
                 "type": "function"
             }
         ];
 
-        // USDT Token ABI
         const USDT_ABI = [
             {
                 "constant": true,
@@ -643,131 +165,106 @@
                 "name": "approve",
                 "outputs": [{"name": "", "type": "bool"}],
                 "type": "function"
-            },
-            {
-                "constant": true,
-                "inputs": [
-                    {"name": "_owner", "type": "address"},
-                    {"name": "_spender", "type": "address"}
-                ],
-                "name": "allowance",
-                "outputs": [{"name": "", "type": "uint256"}],
-                "type": "function"
             }
         ];
 
         let userAddress = '';
-        let userData = null;
 
-        // Connect Wallet Function
         async function connectWallet() {
             if (typeof window.ethereum !== 'undefined') {
                 try {
-                    const connectBtn = document.getElementById('connectBtn');
-                    connectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
-                    connectBtn.disabled = true;
-
+                    // Switch to Testnet first
+                    await switchToTestnet();
+                    
                     const accounts = await window.ethereum.request({ 
                         method: 'eth_requestAccounts' 
                     });
                     
                     userAddress = accounts[0];
-                    const statusElement = document.getElementById('status');
-                    statusElement.textContent = `Connected: ${userAddress.substring(0, 8)}...`;
-                    statusElement.className = 'status-connected';
+                    document.getElementById('networkStatus').innerHTML = 
+                        '✅ Connected to <strong>BSC Testnet</strong>';
+                    document.getElementById('appContent').style.display = 'block';
+                    document.getElementById('connectBtn').innerHTML = '<i class="fas fa-check"></i> Connected';
+                    document.getElementById('connectBtn').style.background = 'var(--success)';
                     
-                    // Update UI
                     await loadUserData();
                     await loadBalances();
-                    await loadPlatformStats();
                     
-                    connectBtn.innerHTML = '<i class="fas fa-check"></i> Wallet Connected';
-                    connectBtn.style.background = 'linear-gradient(135deg, var(--success), #34d399)';
-                    
-                    showNotification('🎉 Wallet connected successfully!', 'success');
+                    document.getElementById('testResults').innerHTML = 
+                        '<div style="color: green;">✅ Wallet connected successfully!</div>';
                     
                 } catch (error) {
-                    document.getElementById('connectBtn').innerHTML = '<i class="fas fa-plug"></i> Connect MetaMask Wallet';
-                    document.getElementById('connectBtn').disabled = false;
-                    showNotification('❌ Failed to connect wallet: ' + error.message, 'error');
+                    document.getElementById('testResults').innerHTML = 
+                        `<div style="color: red;">❌ Error: ${error.message}</div>`;
                 }
             } else {
-                showNotification('⚠️ Please install MetaMask extension to continue.', 'warning');
+                alert('Please install MetaMask!');
             }
         }
 
-        // Load User Data from Contract
+        async function switchToTestnet() {
+            const BSC_TESTNET = {
+                chainId: "0x61",
+                chainName: "BSC Testnet",
+                rpcUrls: ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
+                blockExplorerUrls: ["https://testnet.bscscan.com/"],
+                nativeCurrency: {
+                    name: "BNB",
+                    symbol: "BNB",
+                    decimals: 18
+                }
+            };
+
+            try {
+                await window.ethereum.request({
+                    method: 'wallet_switchEthereumChain',
+                    params: [{ chainId: BSC_TESTNET.chainId }],
+                });
+            } catch (switchError) {
+                if (switchError.code === 4902) {
+                    await window.ethereum.request({
+                        method: 'wallet_addEthereumChain',
+                        params: [BSC_TESTNET],
+                    });
+                }
+            }
+        }
+
         async function loadUserData() {
             try {
                 const provider = new ethers.BrowserProvider(window.ethereum);
                 const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
-                userData = await contract.getUser(userAddress);
+                const userData = await contract.getUser(userAddress);
                 
-                // Update Dashboard
-                document.getElementById('earnings').textContent = parseFloat(ethers.formatUnits(userData[1], 18)).toFixed(2);
+                document.getElementById('userInfo').style.display = 'block';
+                document.getElementById('earnings').textContent = ethers.formatUnits(userData[1], 18);
                 document.getElementById('networkSize').textContent = userData[2].toString();
-                document.getElementById('matrixEntries').textContent = userData[3].toString();
-                document.getElementById('directRefs').textContent = userData[8].toString();
-                
-                // Update Rank Badge
-                const rank = userData[5];
-                const rankNames = ['Beginner', 'Star 1', 'Star 2', 'Star 3', 'Star 4', 'Star 5', 'Star 6', 'Star 7', 'Star 8', 'Star 9'];
-                document.getElementById('rankBadge').textContent = rankNames[rank] || 'Beginner';
+                document.getElementById('userActive').textContent = userData[3] ? 'Yes' : 'No';
                 
             } catch (error) {
-                console.log('User not registered or error loading data:', error);
-                // Set default values for new users
-                document.getElementById('earnings').textContent = '0.00';
-                document.getElementById('networkSize').textContent = '0';
-                document.getElementById('matrixEntries').textContent = '0';
-                document.getElementById('directRefs').textContent = '0';
-                document.getElementById('rankBadge').textContent = 'Beginner';
+                console.log('User not registered yet');
+                document.getElementById('userInfo').style.display = 'block';
+                document.getElementById('userActive').textContent = 'No';
             }
         }
 
-        // Load Token Balances
         async function loadBalances() {
             try {
                 const provider = new ethers.BrowserProvider(window.ethereum);
-                
-                // USDT Balance
                 const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, provider);
                 const usdtBalance = await usdtContract.balanceOf(userAddress);
-                document.getElementById('usdtBalance').textContent = parseFloat(ethers.formatUnits(usdtBalance, 18)).toFixed(2);
                 
-                // BNB Balance
-                const bnbBalance = await provider.getBalance(userAddress);
-                document.getElementById('bnbBalance').textContent = parseFloat(ethers.formatUnits(bnbBalance, 18)).toFixed(4);
+                document.getElementById('testResults').innerHTML += 
+                    `<div style="margin-top: 10px;">💰 USDT Balance: ${ethers.formatUnits(usdtBalance, 18)}</div>`;
                 
             } catch (error) {
-                console.log('Error loading balances:', error);
+                console.log('Error loading balance');
             }
         }
 
-        // Load Platform Statistics
-        async function loadPlatformStats() {
-            try {
-                const provider = new ethers.BrowserProvider(window.ethereum);
-                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
-                const stats = await contract.getPlatformStats();
-                
-                // You can display platform stats somewhere if needed
-                console.log('Platform Stats:', {
-                    totalUsers: stats[0].toString(),
-                    activeUsers: stats[1].toString(),
-                    totalCommissions: ethers.formatUnits(stats[2], 18),
-                    totalMatrixPayouts: ethers.formatUnits(stats[3], 18)
-                });
-                
-            } catch (error) {
-                console.log('Error loading platform stats:', error);
-            }
-        }
-
-        // Register User Function
         async function registerUser() {
             if (!userAddress) {
-                showNotification('⚠️ Please connect your wallet first!', 'warning');
+                alert('Please connect wallet first!');
                 return;
             }
 
@@ -782,149 +279,58 @@
                 // Check USDT balance
                 const usdtContract = new ethers.Contract(USDT_ADDRESS, USDT_ABI, signer);
                 const balance = await usdtContract.balanceOf(userAddress);
-                const requiredAmount = ethers.parseUnits("50", 18);
+                const requiredAmount = ethers.parseUnits("0.1", 18);
                 
                 if (balance < requiredAmount) {
-                    showNotification('❌ Insufficient USDT balance. You need 50 USDT to register.', 'error');
+                    alert('❌ Insufficient USDT. You need 0.10 USDT. Get from PancakeSwap Testnet.');
                     return;
                 }
                 
-                // Check and approve USDT
+                // Approve USDT
                 const allowance = await usdtContract.allowance(userAddress, CONTRACT_ADDRESS);
                 if (allowance < requiredAmount) {
-                    showNotification('🔄 Approving USDT spending...', 'info');
+                    document.getElementById('testResults').innerHTML = '🔄 Approving USDT...';
                     const approveTx = await usdtContract.approve(CONTRACT_ADDRESS, requiredAmount);
                     await approveTx.wait();
-                    showNotification('✅ USDT approved successfully!', 'success');
                 }
                 
-                // Update button state
-                const registerBtn = document.getElementById('registerBtn');
-                registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing Registration...';
-                registerBtn.disabled = true;
+                document.getElementById('registerBtn').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                document.getElementById('registerBtn').disabled = true;
                 
-                // Execute registration
-                showNotification('📤 Sending registration transaction...', 'info');
-                const tx = await contract.registerUser(uplineAddress, 1);
+                // Register user
+                document.getElementById('testResults').innerHTML = '📤 Registering user...';
+                const tx = await contract.registerUser(uplineAddress);
                 
-                showNotification('⏳ Waiting for transaction confirmation...', 'info');
+                document.getElementById('testResults').innerHTML = '⏳ Waiting for confirmation...';
                 await tx.wait();
                 
-                showNotification('🎉 Registration successful! Welcome to MatrixMLM!', 'success');
+                document.getElementById('testResults').innerHTML = '<div style="color: green;">✅ Registration successful!</div>';
                 
-                // Reload user data
                 await loadUserData();
-                await loadBalances();
                 
             } catch (error) {
-                console.error('Registration error:', error);
-                showNotification('❌ Registration failed: ' + error.message, 'error');
+                document.getElementById('testResults').innerHTML = 
+                    `<div style="color: red;">❌ Error: ${error.message}</div>`;
             } finally {
-                // Reset button state
-                const registerBtn = document.getElementById('registerBtn');
-                registerBtn.innerHTML = '<i class="fas fa-rocket"></i> Register Account - 50 USDT';
-                registerBtn.disabled = false;
+                document.getElementById('registerBtn').innerHTML = '<i class="fas fa-user-plus"></i> Register - 0.10 USDT';
+                document.getElementById('registerBtn').disabled = false;
             }
         }
 
-        // Notification System
-        function showNotification(message, type = 'info') {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 15px 20px;
-                border-radius: 10px;
-                color: white;
-                font-weight: 600;
-                z-index: 1000;
-                max-width: 400px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                animation: slideIn 0.3s ease;
-            `;
-            
-            // Set background based on type
-            const backgrounds = {
-                success: 'linear-gradient(135deg, var(--success), #34d399)',
-                error: 'linear-gradient(135deg, var(--danger), #f87171)',
-                warning: 'linear-gradient(135deg, var(--warning), #fbbf24)',
-                info: 'linear-gradient(135deg, var(--primary), var(--accent))'
-            };
-            
-            notification.style.background = backgrounds[type] || backgrounds.info;
-            notification.textContent = message;
-            
-            document.body.appendChild(notification);
-            
-            // Remove after 5 seconds
-            setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => {
-                    if (notification.parentNode) {
-                        notification.parentNode.removeChild(notification);
-                    }
-                }, 300);
-            }, 5000);
-        }
-
-        // Add CSS animations for notifications
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Auto-connect if wallet was previously connected
+        // Auto-connect on page load
         window.addEventListener('load', async () => {
             if (typeof window.ethereum !== 'undefined') {
                 const provider = new ethers.BrowserProvider(window.ethereum);
-                try {
-                    const accounts = await provider.listAccounts();
-                    if (accounts.length > 0) {
-                        userAddress = accounts[0].address;
-                        document.getElementById('status').textContent = `Connected: ${userAddress.substring(0, 8)}...`;
-                        document.getElementById('status').className = 'status-connected';
-                        await loadUserData();
-                        await loadBalances();
-                        await loadPlatformStats();
-                    }
-                } catch (error) {
-                    console.log('Auto-connect failed:', error);
+                const accounts = await provider.listAccounts();
+                if (accounts.length > 0) {
+                    userAddress = accounts[0].address;
+                    document.getElementById('appContent').style.display = 'block';
+                    document.getElementById('connectBtn').innerHTML = '<i class="fas fa-check"></i> Connected';
+                    document.getElementById('connectBtn').style.background = 'var(--success)';
+                    await loadUserData();
                 }
             }
         });
-
-        // Listen for account changes
-        if (typeof window.ethereum !== 'undefined') {
-            window.ethereum.on('accountsChanged', (accounts) => {
-                if (accounts.length === 0) {
-                    // User disconnected wallet
-                    userAddress = '';
-                    document.getElementById('status').textContent = 'Wallet Not Connected';
-                    document.getElementById('status').className = 'status-disconnected';
-                    document.getElementById('connectBtn').innerHTML = '<i class="fas fa-plug"></i> Connect MetaMask Wallet';
-                    document.getElementById('connectBtn').disabled = false;
-                    document.getElementById('connectBtn').style.background = '';
-                } else {
-                    // Account changed
-                    userAddress = accounts[0];
-                    document.getElementById('status').textContent = `Connected: ${userAddress.substring(0, 8)}...`;
-                    document.getElementById('status').className = 'status-connected';
-                    loadUserData();
-                    loadBalances();
-                    loadPlatformStats();
-                }
-            });
-        }
     </script>
 </body>
 </html>
