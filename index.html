@@ -1,276 +1,108 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLM DApp - Live Dashboard</title>
+    <title>Live MLM Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
-        :root {
-            --primary: #f0b90b;
-            --secondary: #764ba2;
-            --success: #28a745;
-            --info: #17a2b8;
+        body { 
+            font-family: Arial; 
+            text-align: center; 
+            padding: 20px; 
+            background: #f0f0f0;
         }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #667eea 0%, var(--secondary) 100%);
-            min-height: 100vh;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .dapp-container {
-            width: 100%;
-            max-width: 500px;
+        .dashboard {
             background: white;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-        }
-        
-        .dapp-header {
-            background: var(--primary);
-            padding: 25px;
-            text-align: center;
-            color: black;
-        }
-        
-        .dapp-body {
-            padding: 25px;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin: 20px 0;
-        }
-        
-        .stat-card {
-            background: #f8f9fa;
             padding: 20px;
             border-radius: 15px;
-            text-align: center;
-            border: 2px solid #e9ecef;
+            max-width: 400px;
+            margin: 0 auto;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        
-        .stat-value {
+        .stat {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px;
+            border-radius: 10px;
+            border-left: 5px solid #28a745;
+        }
+        .value {
             font-size: 24px;
             font-weight: bold;
-            color: var(--success);
-            margin: 10px 0;
+            color: #28a745;
         }
-        
-        .stat-label {
-            font-size: 14px;
-            color: #6c757d;
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 15px;
+        button {
+            padding: 12px 20px;
+            background: #f0b90b;
             border: none;
-            border-radius: 12px;
-            font-size: 16px;
+            border-radius: 8px;
             font-weight: bold;
+            margin: 5px;
             cursor: pointer;
-            margin: 10px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            color: black;
-        }
-        
-        .btn-info {
-            background: var(--info);
-            color: white;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-weight: bold;
-            margin: 10px 0;
-        }
-        
-        .status-active {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .referral-section {
-            background: #e7f3ff;
-            padding: 20px;
-            border-radius: 15px;
-            margin: 20px 0;
-        }
-        
-        .referral-link {
-            background: white;
-            padding: 15px;
-            border-radius: 10px;
-            border: 2px dashed #007bff;
-            margin: 10px 0;
-            word-break: break-all;
-            font-size: 14px;
         }
     </style>
 </head>
 <body>
-    <div class="dapp-container">
-        <div class="dapp-header">
-            <h1>🚀 MLM Dashboard</h1>
-            <p>Welcome to Your Network! 👋</p>
+    <div class="dashboard">
+        <h1>📊 Live Dashboard</h1>
+        
+        <div class="stat">
+            <div class="value" id="networkSize">1</div>
+            <div>Direct Team</div>
         </div>
         
-        <div class="dapp-body">
-            <!-- User Status -->
-            <div style="text-align: center; margin-bottom: 20px;">
-                <div class="status-badge status-active">✅ ACTIVE MEMBER</div>
-                <p>Wallet: <strong id="walletAddress">0x04c567...</strong></p>
-            </div>
+        <div class="stat">
+            <div class="value" id="totalTeam">1</div>
+            <div>Total Team</div>
+        </div>
+        
+        <div class="stat">
+            <div class="value" id="earnings">0.10 USDT</div>
+            <div>Your Earnings</div>
+        </div>
+        
+        <div class="stat">
+            <div class="value" id="level">Level 1</div>
+            <div>Current Level</div>
+        </div>
 
-            <!-- Stats Grid -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="networkSize">1</div>
-                    <div class="stat-label">Direct Team</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-value" id="totalTeam">1</div>
-                    <div class="stat-label">Total Team</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-value" id="earnings">0.10</div>
-                    <div class="stat-label">Earnings (USDT)</div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-value" id="level">1</div>
-                    <div class="stat-label">Current Level</div>
-                </div>
-            </div>
+        <button onclick="refreshData()">🔄 Refresh Data</button>
+        <button onclick="addReferral()">➕ Add Test Referral</button>
 
-            <!-- Referral Section -->
-            <div class="referral-section">
-                <h3>👥 Your Referral Link</h3>
-                <div class="referral-link" id="referralLink">
-                    https://your-dapp.com?ref=0x04c567...
-                </div>
-                <button class="btn btn-info" onclick="copyReferralLink()">
-                    📋 Copy Referral Link
-                </button>
-            </div>
-
-            <!-- Quick Actions -->
-            <h3>⚡ Quick Actions</h3>
-            <button class="btn btn-primary" onclick="refreshDashboard()">
-                🔄 Refresh Dashboard
-            </button>
-            
-            <button class="btn btn-primary" onclick="viewTeam()">
-                👥 View My Team
-            </button>
-            
-            <button class="btn btn-primary" onclick="withdrawEarnings()">
-                💰 Withdraw Earnings
-            </button>
-
-            <!-- Recent Activity -->
-            <div style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 15px;">
-                <h3>📈 Recent Activity</h3>
-                <div style="margin: 15px 0;">
-                    <div style="display: flex; justify-content: between; margin: 10px 0;">
-                        <span>✅ Registration Completed</span>
-                        <span style="color: #28a745;">+0.10 USDT</span>
-                    </div>
-                    <div style="display: flex; justify-content: between; margin: 10px 0;">
-                        <span>👤 Joined Network</span>
-                        <span style="color: #28a745;">Level 1 Activated</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Status -->
-            <div id="status" style="padding: 15px; background: #d4edda; color: #155724; border-radius: 10px; margin: 20px 0; text-align: center;">
-                🎉 Welcome to the network! Start building your team.
-            </div>
+        <div id="status" style="margin: 15px; padding: 10px; background: #d4edda; border-radius: 5px;">
+            ✅ Registered Successfully
         </div>
     </div>
 
     <script>
-        let userAddress = "0x04c567..."; // Replace with actual address
-        
-        // Initialize Dashboard
-        function initializeDashboard() {
-            // Update referral link
-            document.getElementById('referralLink').textContent = 
-                `https://mlm-dapp.com?ref=${userAddress}`;
-            
-            // Simulate dynamic data (replace with actual contract calls)
-            simulateLiveData();
-        }
-        
-        // Simulate live data updates
-        function simulateLiveData() {
-            // These values would come from your smart contract
-            const networkSize = 1; // Your direct referrals
-            const totalTeam = 1;   // Total team size
-            const earnings = 0.10; // Current earnings
-            const level = 1;       // Current level
-            
+        // Current data
+        let networkSize = 1;
+        let totalTeam = 1;
+        let earnings = 0.10;
+        let level = 1;
+
+        // Refresh data function
+        function refreshData() {
             document.getElementById('networkSize').textContent = networkSize;
             document.getElementById('totalTeam').textContent = totalTeam;
-            document.getElementById('earnings').textContent = earnings.toFixed(2);
-            document.getElementById('level').textContent = level;
+            document.getElementById('earnings').textContent = earnings.toFixed(2) + " USDT";
+            document.getElementById('level').textContent = "Level " + level;
+            
+            document.getElementById('status').textContent = "✅ Data Updated!";
         }
-        
-        // Copy referral link
-        function copyReferralLink() {
-            const link = document.getElementById('referralLink').textContent;
-            navigator.clipboard.writeText(link).then(() => {
-                alert('✅ Referral link copied!');
-            });
+
+        // Add test referral
+        function addReferral() {
+            networkSize += 1;
+            totalTeam += 1;
+            earnings += 0.05; // 0.05 USDT per referral
+            level = Math.floor(totalTeam / 5) + 1; // Level up every 5 referrals
+            
+            refreshData();
+            document.getElementById('status').textContent = "✅ New referral added! +0.05 USDT";
         }
-        
-        // Refresh dashboard
-        function refreshDashboard() {
-            document.getElementById('status').textContent = "🔄 Updating dashboard...";
-            setTimeout(() => {
-                simulateLiveData();
-                document.getElementById('status').textContent = "✅ Dashboard updated!";
-            }, 1500);
-        }
-        
-        // View team (placeholder)
-        function viewTeam() {
-            document.getElementById('status').textContent = "👥 Loading team structure...";
-            // Add team view functionality here
-        }
-        
-        // Withdraw earnings (placeholder)
-        function withdrawEarnings() {
-            document.getElementById('status').textContent = "💰 Processing withdrawal...";
-            // Add withdrawal functionality here
-        }
-        
-        // Auto-initialize
-        window.addEventListener('load', initializeDashboard);
+
+        // Initial load
+        refreshData();
     </script>
 </body>
 </html>
