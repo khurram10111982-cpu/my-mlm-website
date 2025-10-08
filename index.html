@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLM DApp - Fixed Registration</title>
+    <title>MLM DApp - Live Dashboard</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
         :root {
             --primary: #f0b90b;
             --secondary: #764ba2;
             --success: #28a745;
-            --danger: #dc3545;
+            --info: #17a2b8;
         }
         
         * {
@@ -31,7 +31,7 @@
         
         .dapp-container {
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
             background: white;
             border-radius: 20px;
             overflow: hidden;
@@ -47,6 +47,33 @@
         
         .dapp-body {
             padding: 25px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            border: 2px solid #e9ecef;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--success);
+            margin: 10px 0;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
         }
         
         .btn {
@@ -66,233 +93,184 @@
             color: black;
         }
         
-        .btn-success {
-            background: var(--success);
+        .btn-info {
+            background: var(--info);
             color: white;
         }
         
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        
-        .status-card {
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            text-align: center;
+        .status-badge {
+            display: inline-block;
+            padding: 8px 15px;
+            border-radius: 20px;
             font-weight: bold;
-        }
-        
-        .connected {
-            background: #d4edda;
-            color: #155724;
-            border: 2px solid #c3e6cb;
-        }
-        
-        .input-field {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 16px;
             margin: 10px 0;
         }
         
-        .balance {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--success);
-            text-align: center;
-            margin: 15px 0;
+        .status-active {
+            background: #d4edda;
+            color: #155724;
         }
         
-        .dashboard {
-            background: #f8f9fa;
+        .referral-section {
+            background: #e7f3ff;
             padding: 20px;
             border-radius: 15px;
             margin: 20px 0;
-            border: 2px solid #e9ecef;
         }
         
-        .loading {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .error {
-            background: #f8d7da;
-            color: #721c24;
+        .referral-link {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px dashed #007bff;
+            margin: 10px 0;
+            word-break: break-all;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="dapp-container">
         <div class="dapp-header">
-            <h1>🚀 MLM DApp - WORKING</h1>
-            <p>Registration Fixed ✅</p>
+            <h1>🚀 MLM Dashboard</h1>
+            <p>Welcome to Your Network! 👋</p>
         </div>
         
         <div class="dapp-body">
-            <div id="connectionStatus" class="status-card connected">
-                ✅ Connected: <span id="walletAddress">0x04c567...</span>
+            <!-- User Status -->
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div class="status-badge status-active">✅ ACTIVE MEMBER</div>
+                <p>Wallet: <strong id="walletAddress">0x04c567...</strong></p>
             </div>
 
-            <div class="dashboard">
-                <h3>📊 Dashboard</h3>
-                <div class="balance" id="balance">0.298366 BNB</div>
-                <div style="text-align: center;">
-                    <strong>Network Size:</strong> <span id="networkSize">0</span>
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="networkSize">1</div>
+                    <div class="stat-label">Direct Team</div>
                 </div>
-                <div class="status-card" id="userStatus" style="background: #f8d7da;">
-                    🔴 Not Registered
+                
+                <div class="stat-card">
+                    <div class="stat-value" id="totalTeam">1</div>
+                    <div class="stat-label">Total Team</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value" id="earnings">0.10</div>
+                    <div class="stat-label">Earnings (USDT)</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value" id="level">1</div>
+                    <div class="stat-label">Current Level</div>
                 </div>
             </div>
+
+            <!-- Referral Section -->
+            <div class="referral-section">
+                <h3>👥 Your Referral Link</h3>
+                <div class="referral-link" id="referralLink">
+                    https://your-dapp.com?ref=0x04c567...
+                </div>
+                <button class="btn btn-info" onclick="copyReferralLink()">
+                    📋 Copy Referral Link
+                </button>
+            </div>
+
+            <!-- Quick Actions -->
+            <h3>⚡ Quick Actions</h3>
+            <button class="btn btn-primary" onclick="refreshDashboard()">
+                🔄 Refresh Dashboard
+            </button>
             
-            <input type="text" class="input-field" id="uplineAddress" 
-                   placeholder="👥 Upline Address (Optional)">
-
-            <button class="btn btn-success" onclick="registerWithTransaction()">
-                💰 Register - 0.10 USDT
+            <button class="btn btn-primary" onclick="viewTeam()">
+                👥 View My Team
+            </button>
+            
+            <button class="btn btn-primary" onclick="withdrawEarnings()">
+                💰 Withdraw Earnings
             </button>
 
-            <button class="btn btn-primary" onclick="testTransaction()">
-                🧪 Test Transaction
-            </button>
-
-            <div id="status" class="status-card" style="background: #d4edda;">
-                ✅ Ready to register! Click button above.
+            <!-- Recent Activity -->
+            <div style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 15px;">
+                <h3>📈 Recent Activity</h3>
+                <div style="margin: 15px 0;">
+                    <div style="display: flex; justify-content: between; margin: 10px 0;">
+                        <span>✅ Registration Completed</span>
+                        <span style="color: #28a745;">+0.10 USDT</span>
+                    </div>
+                    <div style="display: flex; justify-content: between; margin: 10px 0;">
+                        <span>👤 Joined Network</span>
+                        <span style="color: #28a745;">Level 1 Activated</span>
+                    </div>
+                </div>
             </div>
 
-            <div style="background: #e7f3ff; padding: 15px; border-radius: 10px; margin: 15px 0;">
-                <strong>ℹ️ Registration Process:</strong><br>
-                1. Click Register button<br>
-                2. MetaMask/SafePal popup ayega<br>
-                3. Confirm transaction<br>
-                4. Wait for confirmation
+            <!-- Status -->
+            <div id="status" style="padding: 15px; background: #d4edda; color: #155724; border-radius: 10px; margin: 20px 0; text-align: center;">
+                🎉 Welcome to the network! Start building your team.
             </div>
         </div>
     </div>
 
     <script>
-        let provider, signer, userAddress;
-
-        // Contract Details
-        const CONTRACT_ADDRESS = "0x019B57719039959E91cf4f6BFE424081CFD410d0";
+        let userAddress = "0x04c567..."; // Replace with actual address
         
-        // Simple ABI for register function
-        const CONTRACT_ABI = [
-            {
-                "inputs": [{"internalType": "address", "name": "upline", "type": "address"}],
-                "name": "register",
-                "outputs": [],
-                "stateMutability": "payable",
-                "type": "function"
-            }
-        ];
-
-        // Initialize on load
-        async function initializeApp() {
-            try {
-                if (typeof window.ethereum !== 'undefined') {
-                    provider = new ethers.providers.Web3Provider(window.ethereum);
-                    signer = provider.getSigner();
-                    
-                    const accounts = await provider.listAccounts();
-                    if (accounts.length > 0) {
-                        userAddress = accounts[0];
-                        document.getElementById('walletAddress').textContent = 
-                            userAddress.substring(0, 8) + '...' + userAddress.substring(38);
-                    }
-                }
-            } catch (error) {
-                console.log("Init error:", error);
-            }
-        }
-
-        // Register with proper transaction
-        async function registerWithTransaction() {
-            const status = document.getElementById('status');
-            const userStatus = document.getElementById('userStatus');
+        // Initialize Dashboard
+        function initializeDashboard() {
+            // Update referral link
+            document.getElementById('referralLink').textContent = 
+                `https://mlm-dapp.com?ref=${userAddress}`;
             
-            try {
-                status.textContent = "🔄 Starting registration process...";
-                status.className = "status-card loading";
-                
-                if (!signer) {
-                    await initializeApp();
-                }
-
-                const uplineAddress = document.getElementById('uplineAddress').value.trim() || 
-                                    "0x0000000000000000000000000000000000000000";
-
-                // Create contract instance
-                const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-                
-                status.textContent = "🔄 Sending transaction to blockchain...";
-                
-                // Send transaction with proper gas settings
-                const tx = await contract.register(uplineAddress, {
-                    value: ethers.utils.parseEther("0.00"), // Adjust if registration requires BNB
-                    gasLimit: 250000
-                });
-
-                status.textContent = "⏳ Transaction sent! Waiting for confirmation...";
-                
-                // Wait for transaction to be mined
-                const receipt = await tx.wait();
-                
-                status.textContent = "✅ Registration successful!";
-                status.className = "status-card connected";
-                
-                userStatus.textContent = "✅ Registered Successfully";
-                userStatus.style.background = "#d4edda";
-                
-                document.getElementById('networkSize').textContent = "1";
-                
-                console.log("Transaction successful:", receipt);
-                
-            } catch (error) {
-                console.error("Registration error:", error);
-                status.textContent = "❌ Error: " + error.message;
-                status.className = "status-card error";
-                
-                if (error.code === 4001) {
-                    status.textContent = "❌ Transaction rejected by user";
-                } else if (error.code === -32603) {
-                    status.textContent = "❌ Contract execution failed";
-                }
-            }
+            // Simulate dynamic data (replace with actual contract calls)
+            simulateLiveData();
         }
-
-        // Test transaction function
-        async function testTransaction() {
-            const status = document.getElementById('status');
+        
+        // Simulate live data updates
+        function simulateLiveData() {
+            // These values would come from your smart contract
+            const networkSize = 1; // Your direct referrals
+            const totalTeam = 1;   // Total team size
+            const earnings = 0.10; // Current earnings
+            const level = 1;       // Current level
             
-            try {
-                status.textContent = "🧪 Testing transaction...";
-                status.className = "status-card loading";
-                
-                // Just send 0 BNB to yourself to test
-                const tx = await signer.sendTransaction({
-                    to: userAddress,
-                    value: ethers.utils.parseEther("0.00"),
-                    gasLimit: 21000
-                });
-                
-                status.textContent = "⏳ Test transaction sent...";
-                await tx.wait();
-                status.textContent = "✅ Test transaction successful!";
-                status.className = "status-card connected";
-                
-            } catch (error) {
-                status.textContent = "❌ Test failed: " + error.message;
-                status.className = "status-card error";
-            }
+            document.getElementById('networkSize').textContent = networkSize;
+            document.getElementById('totalTeam').textContent = totalTeam;
+            document.getElementById('earnings').textContent = earnings.toFixed(2);
+            document.getElementById('level').textContent = level;
         }
-
+        
+        // Copy referral link
+        function copyReferralLink() {
+            const link = document.getElementById('referralLink').textContent;
+            navigator.clipboard.writeText(link).then(() => {
+                alert('✅ Referral link copied!');
+            });
+        }
+        
+        // Refresh dashboard
+        function refreshDashboard() {
+            document.getElementById('status').textContent = "🔄 Updating dashboard...";
+            setTimeout(() => {
+                simulateLiveData();
+                document.getElementById('status').textContent = "✅ Dashboard updated!";
+            }, 1500);
+        }
+        
+        // View team (placeholder)
+        function viewTeam() {
+            document.getElementById('status').textContent = "👥 Loading team structure...";
+            // Add team view functionality here
+        }
+        
+        // Withdraw earnings (placeholder)
+        function withdrawEarnings() {
+            document.getElementById('status').textContent = "💰 Processing withdrawal...";
+            // Add withdrawal functionality here
+        }
+        
         // Auto-initialize
-        window.addEventListener('load', initializeApp);
+        window.addEventListener('load', initializeDashboard);
     </script>
 </body>
 </html>
