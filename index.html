@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MLM Business Dashboard</title>
+    <title>Dashboard - MLM System</title>
     <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
     <style>
         :root {
@@ -63,12 +63,6 @@
             border-left: 4px solid var(--primary);
         }
         
-        .nav-item i {
-            margin-right: 10px;
-            width: 20px;
-            text-align: center;
-        }
-        
         /* Main Content */
         .main-content {
             flex: 1;
@@ -83,7 +77,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             margin-bottom: 25px;
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
         }
         
@@ -134,8 +128,8 @@
             font-size: 14px;
         }
         
-        /* Investment Section */
-        .investment-section {
+        /* Referral Section */
+        .referral-section {
             background: white;
             padding: 25px;
             border-radius: 15px;
@@ -143,16 +137,74 @@
             margin-bottom: 25px;
         }
         
-        .investment-amount {
-            font-size: 36px;
-            font-weight: bold;
-            color: var(--success);
-            text-align: center;
+        .referral-link {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            word-break: break-all;
+            font-family: monospace;
+        }
+        
+        /* Matrix Section */
+        .matrix-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
             margin: 20px 0;
         }
         
+        .matrix-cell {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 2px solid #dee2e6;
+        }
+        
+        .matrix-cell.filled {
+            background: #d4edda;
+            border-color: #28a745;
+        }
+        
+        /* Income Distribution */
+        .distribution-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 25px;
+        }
+        
+        .distribution-chart {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .distribution-item {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .matrix-dist { background: #d4edda; }
+        .unilevel-dist { background: #d1ecf1; }
+        .rank-dist { background: #fff3cd; }
+        .company-dist { background: #f8d7da; }
+        
+        /* Buttons */
         .btn {
-            padding: 12px 30px;
+            padding: 12px 20px;
             border: none;
             border-radius: 8px;
             font-weight: bold;
@@ -176,53 +228,6 @@
             padding: 15px;
         }
         
-        /* Wallet Cards */
-        .wallet-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-        
-        .wallet-card {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .wallet-amount {
-            font-size: 28px;
-            font-weight: bold;
-            color: var(--success);
-            margin: 15px 0;
-        }
-        
-        /* Contract Status */
-        .contract-status {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-top: 25px;
-        }
-        
-        .status-item {
-            display: flex;
-            justify-content: between;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .status-label {
-            color: #666;
-        }
-        
-        .status-value {
-            font-weight: bold;
-            color: var(--secondary);
-        }
-        
         .tab-content {
             display: none;
         }
@@ -242,29 +247,17 @@
             <li class="nav-item active" onclick="showTab('dashboard')">
                 📊 Dashboard
             </li>
-            <li class="nav-item" onclick="showTab('profile')">
-                👤 Profile
+            <li class="nav-item" onclick="showTab('matrix')">
+                🔢 Matrix
             </li>
-            <li class="nav-item" onclick="showTab('genealogy')">
-                🌳 Genealogy
+            <li class="nav-item" onclick="showTab('unilevel')">
+                🌳 Unilevel
             </li>
-            <li class="nav-item" onclick="showTab('invest')">
-                💰 Invest Now
+            <li class="nav-item" onclick="showTab('income')">
+                💰 Income
             </li>
-            <li class="nav-item" onclick="showTab('earning-report')">
-                📈 Earning Report
-            </li>
-            <li class="nav-item" onclick="showTab('income-wallet')">
-                💳 Income Wallet
-            </li>
-            <li class="nav-item" onclick="showTab('swap-wallet')">
-                🔄 Swap Wallet
-            </li>
-            <li class="nav-item" onclick="showTab('e-wallet')">
-                🏦 E-Wallet
-            </li>
-            <li class="nav-item" onclick="showTab('support')">
-                🎫 Support
+            <li class="nav-item" onclick="showTab('team')">
+                👥 My Team
             </li>
             <li class="nav-item" onclick="logout()">
                 🚪 Logout
@@ -277,14 +270,14 @@
         <!-- Header -->
         <div class="header">
             <div class="user-info">
-                <div class="user-avatar">TEAM008</div>
+                <div class="user-avatar" id="userAvatar">USER</div>
                 <div>
-                    <h3>Welcome, Team Leader!</h3>
-                    <p>User ID: TEAM008 | Rank: Silver</p>
+                    <h3>Welcome, <span id="userName">User</span>!</h3>
+                    <p>User ID: <span id="userId">TEAM008</span> | Rank: <span id="userRank">Silver</span></p>
                 </div>
             </div>
             <div>
-                <button class="btn btn-primary" onclick="connectWallet()">🔗 Connect Wallet</button>
+                <button class="btn btn-primary" onclick="registerUser()">✅ Register in Contract</button>
             </div>
         </div>
 
@@ -293,101 +286,196 @@
             <!-- Stats Grid -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="stat-value" id="totalTeam">3</div>
+                    <div class="stat-value" id="totalTeam">0</div>
                     <div class="stat-label">Total Team</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="activeTeam">3</div>
-                    <div class="stat-label">Active Team</div>
+                    <div class="stat-value" id="directTeam">0</div>
+                    <div class="stat-label">Direct Team</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="todayJoining">0</div>
-                    <div class="stat-label">Today's Joining</div>
+                    <div class="stat-value" id="totalEarnings">0 USDT</div>
+                    <div class="stat-label">Total Earnings</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value" id="directReferral">1</div>
-                    <div class="stat-label">Direct Referral</div>
+                    <div class="stat-value" id="matrixComplete">0/5</div>
+                    <div class="stat-label">Matrix Completion</div>
                 </div>
             </div>
 
-            <!-- Investment Section -->
-            <div class="investment-section">
-                <h3>Total Investment</h3>
-                <div class="investment-amount" id="totalInvestment">1,000.00 USDT</div>
-                <div style="text-align: center;">
-                    <button class="btn btn-success" onclick="claimAirdrop()">🎁 Claim Airdrop</button>
+            <!-- Referral Section -->
+            <div class="referral-section">
+                <h3>🔗 Your Referral Link</h3>
+                <div class="referral-link" id="referralLink">
+                    Loading...
                 </div>
+                <button class="btn btn-success btn-block" onclick="copyReferralLink()">
+                    📋 Copy Referral Link
+                </button>
             </div>
 
-            <!-- Wallet Grid -->
-            <div class="wallet-grid">
-                <div class="wallet-card">
-                    <h3>💰 Income Wallet</h3>
-                    <div class="wallet-amount" id="incomeWallet">250.00 USDT</div>
-                    <button class="btn btn-primary btn-block" onclick="withdrawIncome()">Withdraw</button>
+            <!-- Quick Actions -->
+            <div class="stats-grid">
+                <div class="stat-card" style="cursor: pointer;" onclick="showTab('matrix')">
+                    <div class="stat-value">🔢</div>
+                    <div class="stat-label">View Matrix</div>
+                </div>
+                <div class="stat-card" style="cursor: pointer;" onclick="showTab('unilevel')">
+                    <div class="stat-value">🌳</div>
+                    <div class="stat-label">Unilevel Tree</div>
+                </div>
+                <div class="stat-card" style="cursor: pointer;" onclick="showTab('income')">
+                    <div class="stat-value">💰</div>
+                    <div class="stat-label">Income Report</div>
+                </div>
+                <div class="stat-card" style="cursor: pointer;" onclick="showTab('team')">
+                    <div class="stat-value">👥</div>
+                    <div class="stat-label">Team Management</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Matrix Tab -->
+        <div id="matrix" class="tab-content">
+            <div class="matrix-section">
+                <h2>🔢 Matrix System (5 Members to Complete)</h2>
+                <div class="matrix-grid">
+                    <div class="matrix-cell filled">
+                        <div>Slot 1</div>
+                        <div class="stat-value">✅</div>
+                        <div>Filled</div>
+                    </div>
+                    <div class="matrix-cell filled">
+                        <div>Slot 2</div>
+                        <div class="stat-value">✅</div>
+                        <div>Filled</div>
+                    </div>
+                    <div class="matrix-cell">
+                        <div>Slot 3</div>
+                        <div class="stat-value">❌</div>
+                        <div>Empty</div>
+                    </div>
+                    <div class="matrix-cell">
+                        <div>Slot 4</div>
+                        <div class="stat-value">❌</div>
+                        <div>Empty</div>
+                    </div>
+                    <div class="matrix-cell">
+                        <div>Slot 5</div>
+                        <div class="stat-value">❌</div>
+                        <div>Empty</div>
+                    </div>
                 </div>
                 
-                <div class="wallet-card">
-                    <h3>🔄 Swap Wallet</h3>
-                    <div class="wallet-amount" id="swapWallet">150.00 USDT</div>
-                    <button class="btn btn-primary btn-block" onclick="swapTokens()">Swap Now</button>
+                <div style="text-align: center; margin: 20px 0;">
+                    <div class="stat-value">2/5</div>
+                    <div>Matrix Completion Progress</div>
+                    <div class="stat-label">3 more members needed to complete matrix</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Unilevel Tab -->
+        <div id="unilevel" class="tab-content">
+            <div class="referral-section">
+                <h2>🌳 Unilevel Income & Tree</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="level1Income">0 USDT</div>
+                        <div class="stat-label">Level 1 Income</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="level2Income">0 USDT</div>
+                        <div class="stat-label">Level 2 Income</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="level3Income">0 USDT</div>
+                        <div class="stat-label">Level 3 Income</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalUnilevel">0 USDT</div>
+                        <div class="stat-label">Total Unilevel</div>
+                    </div>
                 </div>
                 
-                <div class="wallet-card">
-                    <h3>🏦 E-Wallet</h3>
-                    <div class="wallet-amount" id="eWallet">600.00 USDT</div>
-                    <button class="btn btn-primary btn-block" onclick="transferEWallet()">Transfer</button>
-                </div>
-            </div>
-
-            <!-- Contract Status -->
-            <div class="contract-status">
-                <h3>📊 Contract Status</h3>
-                <div class="status-item">
-                    <span class="status-label">Contract Address:</span>
-                    <span class="status-value" id="contractAddress">0x019B57719039959E91cf4f6BFE424081CFD410d0</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Network:</span>
-                    <span class="status-value" id="networkStatus">BSC Testnet</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Wallet Connected:</span>
-                    <span class="status-value" id="walletStatus">Not Connected</span>
-                </div>
-                <div class="status-item">
-                    <span class="status-label">Registration Status:</span>
-                    <span class="status-value" id="regStatus">Not Registered</span>
+                <h3>Unilevel Tree Structure</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-weight: bold; margin: 10px 0;">🎯 YOU (Level 0)</div>
+                    <div style="display: flex; justify-content: center; gap: 20px; margin: 20px 0;">
+                        <div style="text-align: center;">
+                            <div>👤 Level 1</div>
+                            <div><small>Member A</small></div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div>👤 Level 1</div>
+                            <div><small>Member B</small></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Other Tabs (Placeholder) -->
-        <div id="profile" class="tab-content">
-            <h2>👤 User Profile</h2>
-            <p>Profile management coming soon...</p>
-        </div>
-        
-        <div id="genealogy" class="tab-content">
-            <h2>🌳 Team Genealogy</h2>
-            <p>Team structure visualization coming soon...</p>
-        </div>
-        
-        <div id="invest" class="tab-content">
-            <h2>💰 Investment Plans</h2>
-            <p>Investment options coming soon...</p>
-        </div>
-        
-        <div id="earning-report" class="tab-content">
-            <h2>📈 Earning Reports</h2>
-            <p>Detailed earnings report coming soon...</p>
+        <!-- Income Tab -->
+        <div id="income" class="tab-content">
+            <div class="distribution-section">
+                <h2>💰 Fund Distribution</h2>
+                <div class="distribution-chart">
+                    <div class="distribution-item matrix-dist">
+                        <div class="stat-value">40%</div>
+                        <div class="stat-label">Matrix Income</div>
+                        <div id="matrixIncome">0 USDT</div>
+                    </div>
+                    <div class="distribution-item unilevel-dist">
+                        <div class="stat-value">48%</div>
+                        <div class="stat-label">Unilevel Income</div>
+                        <div id="unilevelIncome">0 USDT</div>
+                    </div>
+                    <div class="distribution-item rank-dist">
+                        <div class="stat-value">1%</div>
+                        <div class="stat-label">Rank & Rewards</div>
+                        <div id="rankIncome">0 USDT</div>
+                    </div>
+                    <div class="distribution-item company-dist">
+                        <div class="stat-value">11%</div>
+                        <div class="stat-label">Company</div>
+                        <div id="companyIncome">0 USDT</div>
+                    </div>
+                </div>
+                
+                <h3>Total Income: <span id="totalIncome">0 USDT</span></h3>
+                <button class="btn btn-success btn-block" onclick="withdrawIncome()">
+                    💸 Withdraw All Income
+                </button>
+            </div>
         </div>
 
-        <!-- Add other tabs similarly -->
+        <!-- Team Tab -->
+        <div id="team" class="tab-content">
+            <div class="referral-section">
+                <h2>👥 My Team Management</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="directMembers">0</div>
+                        <div class="stat-label">Direct Members</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalMembers">0</div>
+                        <div class="stat-label">Total Members</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="activeMembers">0</div>
+                        <div class="stat-label">Active Members</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="teamEarnings">0 USDT</div>
+                        <div class="stat-label">Team Earnings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Contract Configuration
         const CONTRACT_ADDRESS = "0x019B57719039959E91cf4f6BFE424081CFD410d0";
         const CONTRACT_ABI = [
             "function register(address upline) external payable",
@@ -395,11 +483,160 @@
             "function getEarnings(address user) external view returns (uint256)",
             "function directReferrals(address user) external view returns (uint256)",
             "function totalTeam(address user) external view returns (uint256)",
-            "function withdraw() external",
-            "function invest(uint256 amount) external"
+            "function withdraw() external"
         ];
 
         let provider, signer, userAddress, contract;
+
+        // Check if user is connected
+        window.addEventListener('load', function() {
+            const savedAddress = localStorage.getItem('userAddress');
+            const isConnected = localStorage.getItem('walletConnected');
+            
+            if (!isConnected || !savedAddress) {
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            userAddress = savedAddress;
+            initializeDashboard();
+            connectContract();
+        });
+
+        // Initialize Dashboard
+        function initializeDashboard() {
+            // Set user info
+            document.getElementById('userAvatar').textContent = userAddress.substring(2, 6).toUpperCase();
+            document.getElementById('userName').textContent = 'User ' + userAddress.substring(2, 6);
+            document.getElementById('userId').textContent = 'USER_' + userAddress.substring(2, 8);
+            
+            // Set referral link
+            document.getElementById('referralLink').textContent = 
+                window.location.origin + '/index.html?ref=' + userAddress;
+        }
+
+        // Connect to Contract
+        async function connectContract() {
+            try {
+                if (typeof window.ethereum === 'undefined') {
+                    alert('Please install MetaMask!');
+                    return;
+                }
+
+                provider = new ethers.providers.Web3Provider(window.ethereum);
+                signer = provider.getSigner();
+                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+                
+                // Load contract data
+                await loadContractData();
+                
+            } catch (error) {
+                console.error("Contract connection failed:", error);
+            }
+        }
+
+        // Load data from contract
+        async function loadContractData() {
+            try {
+                if (!contract) return;
+
+                // Get user data from contract
+                const userData = await contract.getUser(userAddress);
+                const directRefs = await contract.directReferrals(userAddress);
+                const totalTeamCount = await contract.totalTeam(userAddress);
+                const earnings = await contract.getEarnings(userAddress);
+
+                // Update dashboard
+                document.getElementById('directTeam').textContent = directRefs.toString();
+                document.getElementById('totalTeam').textContent = totalTeamCount.toString();
+                document.getElementById('directMembers').textContent = directRefs.toString();
+                document.getElementById('totalMembers').textContent = totalTeamCount.toString();
+                document.getElementById('activeMembers').textContent = totalTeamCount.toString();
+
+                // Convert earnings to USDT
+                const earningsUSDT = ethers.utils.formatUnits(earnings, 6);
+                const earningsNum = parseFloat(earningsUSDT);
+                
+                document.getElementById('totalEarnings').textContent = earningsNum.toFixed(2) + " USDT";
+                document.getElementById('teamEarnings').textContent = earningsNum.toFixed(2) + " USDT";
+                document.getElementById('totalIncome').textContent = earningsNum.toFixed(2) + " USDT";
+
+                // Calculate distribution
+                document.getElementById('matrixIncome').textContent = (earningsNum * 0.40).toFixed(2) + " USDT";
+                document.getElementById('unilevelIncome').textContent = (earningsNum * 0.48).toFixed(2) + " USDT";
+                document.getElementById('rankIncome').textContent = (earningsNum * 0.01).toFixed(2) + " USDT";
+                document.getElementById('companyIncome').textContent = (earningsNum * 0.11).toFixed(2) + " USDT";
+
+                // Matrix completion
+                const matrixComplete = Math.min(directRefs.toNumber(), 5);
+                document.getElementById('matrixComplete').textContent = matrixComplete + '/5';
+
+                // Unilevel income
+                document.getElementById('level1Income').textContent = (earningsNum * 0.25).toFixed(2) + " USDT";
+                document.getElementById('level2Income').textContent = (earningsNum * 0.15).toFixed(2) + " USDT";
+                document.getElementById('level3Income').textContent = (earningsNum * 0.08).toFixed(2) + " USDT";
+                document.getElementById('totalUnilevel').textContent = (earningsNum * 0.48).toFixed(2) + " USDT";
+
+            } catch (error) {
+                console.error("Error loading contract data:", error);
+            }
+        }
+
+        // Register User in Contract
+        async function registerUser() {
+            try {
+                if (!contract) {
+                    alert("Please wait for contract connection...");
+                    return;
+                }
+
+                const tx = await contract.register("0x0000000000000000000000000000000000000000", {
+                    value: ethers.utils.parseEther("0.00"),
+                    gasLimit: 300000
+                });
+
+                alert("Registration transaction submitted!");
+                await tx.wait();
+                alert("Registration successful!");
+                
+                // Reload data
+                await loadContractData();
+                
+            } catch (error) {
+                alert("Registration failed: " + error.message);
+            }
+        }
+
+        // Copy Referral Link
+        function copyReferralLink() {
+            const link = document.getElementById('referralLink').textContent;
+            navigator.clipboard.writeText(link);
+            alert("✅ Referral link copied!");
+        }
+
+        // Withdraw Income
+        async function withdrawIncome() {
+            try {
+                if (!contract) {
+                    alert("Contract not connected!");
+                    return;
+                }
+
+                const tx = await contract.withdraw({
+                    gasLimit: 200000
+                });
+                
+                alert("Withdrawal transaction submitted!");
+                await tx.wait();
+                alert("Withdrawal successful!");
+                
+                // Reload data
+                await loadContractData();
+                
+            } catch (error) {
+                alert("Withdrawal failed: " + error.message);
+            }
+        }
 
         // Tab Navigation
         function showTab(tabName) {
@@ -420,130 +657,14 @@
             event.target.classList.add('active');
         }
 
-        // Connect Wallet
-        async function connectWallet() {
-            try {
-                if (typeof window.ethereum === 'undefined') {
-                    alert('Please install MetaMask!');
-                    return;
-                }
-
-                const accounts = await window.ethereum.request({ 
-                    method: 'eth_requestAccounts' 
-                });
-                
-                provider = new ethers.providers.Web3Provider(window.ethereum);
-                signer = provider.getSigner();
-                userAddress = accounts[0];
-                contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-
-                // Update UI
-                document.getElementById('walletStatus').textContent = "Connected ✅";
-                document.getElementById('walletStatus').style.color = "#00a86b";
-                
-                // Load contract data
-                await loadContractData();
-
-            } catch (error) {
-                console.error("Wallet connection failed:", error);
-                alert("Connection failed: " + error.message);
-            }
-        }
-
-        // Load data from contract
-        async function loadContractData() {
-            try {
-                if (!contract) return;
-
-                // Get user data from contract
-                const userData = await contract.getUser(userAddress);
-                const directRefs = await contract.directReferrals(userAddress);
-                const totalTeamCount = await contract.totalTeam(userAddress);
-                const earnings = await contract.getEarnings(userAddress);
-
-                // Update dashboard
-                document.getElementById('directReferral').textContent = directRefs.toString();
-                document.getElementById('totalTeam').textContent = totalTeamCount.toString();
-                document.getElementById('activeTeam').textContent = totalTeamCount.toString(); // Assuming all are active
-                document.getElementById('regStatus').textContent = userData[2] ? "Registered ✅" : "Not Registered";
-
-                // Convert earnings to USDT (assuming 6 decimals)
-                const earningsUSDT = ethers.utils.formatUnits(earnings, 6);
-                document.getElementById('incomeWallet').textContent = parseFloat(earningsUSDT).toFixed(2) + " USDT";
-
-            } catch (error) {
-                console.error("Error loading contract data:", error);
-            }
-        }
-
-        // Claim Airdrop
-        async function claimAirdrop() {
-            try {
-                if (!contract) {
-                    alert("Please connect wallet first!");
-                    return;
-                }
-
-                // This would call your contract's airdrop function
-                alert("Airdrop claim function would be called here");
-                // const tx = await contract.claimAirdrop();
-                // await tx.wait();
-                
-            } catch (error) {
-                alert("Airdrop claim failed: " + error.message);
-            }
-        }
-
-        // Withdraw Income
-        async function withdrawIncome() {
-            try {
-                if (!contract) {
-                    alert("Please connect wallet first!");
-                    return;
-                }
-
-                const tx = await contract.withdraw({
-                    gasLimit: 200000
-                });
-                
-                alert("Withdrawal transaction submitted!");
-                await tx.wait();
-                alert("Withdrawal successful!");
-                
-                // Reload data
-                await loadContractData();
-                
-            } catch (error) {
-                alert("Withdrawal failed: " + error.message);
-            }
-        }
-
-        // Swap Tokens
-        async function swapTokens() {
-            alert("Token swap functionality would be implemented here");
-        }
-
-        // Transfer E-Wallet
-        async function transferEWallet() {
-            alert("E-Wallet transfer functionality would be implemented here");
-        }
-
         // Logout
         function logout() {
             if (confirm("Are you sure you want to logout?")) {
-                window.location.reload();
+                localStorage.removeItem('userAddress');
+                localStorage.removeItem('walletConnected');
+                window.location.href = 'index.html';
             }
         }
-
-        // Auto-connect if wallet was previously connected
-        window.addEventListener('load', async () => {
-            if (typeof window.ethereum !== 'undefined') {
-                const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                if (accounts.length > 0) {
-                    setTimeout(connectWallet, 1000);
-                }
-            }
-        });
     </script>
 </body>
 </html>
